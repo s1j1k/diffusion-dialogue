@@ -1,0 +1,7 @@
+# reference code
+DiffuSeq 
+
+# python env
+.venv
+
+.DS_Store
