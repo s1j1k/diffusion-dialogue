@@ -5,4 +5,10 @@ DiffuSeq
 .venv
 
 .DS_Store
+
+# Datasets 
 src/datasets/
+
+# Saved model state
+*.pth
+

@@ -324,7 +324,6 @@ def main():
     test_loader = DataLoader(test_dataset, batch_size=config.batch_size, sampler=RandomSampler(test_dataset))
 
     # Convert the data loaders to infinite data loaders
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     train_loader_infinite = infinite_data_loader(train_loader, device)  # Ensure train_loader returns batches on the correct device
     valid_loader_infinite = infinite_data_loader(valid_loader, device)  # Ensure valid_loader returns batches on the correct device
 
@@ -345,8 +344,12 @@ def main():
 
     # Instantiate the diffusion model & transformer
     diffusion = GaussianDiffusion(betas=betas)
-    model = TransformerNetModel(vocab_size=vocab_size, input_dims=embedding_dim, hidden_t_dim=config.hidden_dim, output_dims=config.output_dims).to(device)
+    model = TransformerNetModel(vocab_size=vocab_size, input_dims=config.embedding_dim, hidden_t_dim=config.hidden_dim, output_dims=config.output_dims).to(device)
+    
+    # Save the transformer model state dict for inference stage
+    torch.save(model.state_dict(), 'saved_model_state_dict.pth')
 
+    # Log the total number of parameters
     pytorch_total_params = sum(p.numel() for p in model.parameters())
     log.info(f'The parameter count is {pytorch_total_params}')
 
@@ -371,16 +374,17 @@ def main():
     # TODO check the inference stage is all correct
     # TODO add comments everywhere else and clean up
     # Initialize the model
+    # TODO how to save the vocab_size
     model = TransformerNetModel(
         vocab_size=vocab_size, 
-        input_dims=embedding_dim, 
+        input_dims=config.embedding_dim, 
         hidden_t_dim=config.hidden_dim, 
         output_dims=config.output_dims
     )
     model.to(device)
 
     # Load the trained model weights
-    model.load_state_dict(torch.load('checkpoints/trained_model.pth', map_location=device))
+    model.load_state_dict(torch.load('saved_model_state_dict.pth'))
     model.eval()
 
     # Load the tokenizer
