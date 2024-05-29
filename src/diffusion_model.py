@@ -1,8 +1,31 @@
-# TODO explore other simplistic sample code
-# https://github.com/lucidrains/denoising-diffusion-pytorch
-# https://e-dorigatti.github.io/math/deep%20learning/2023/06/25/diffusion.html
-# https://github.com/tanelp/tiny-diffusion
-# NOTE adapted from diffuSeq, which is adapted from https://github.com/hojonathanho/diffusion/blob/1e0dceb3b3495bbe19116a5e1b3596cd0706c543/diffusion_tf/diffusion_utils_2.py#L42
+"""
+
+Main diffusion model class for text generation tasks.
+
+Authors: 
+Group 14
+Sally Arnold - 992316
+Yun Chu - 1342245
+Thet Htut Aung - 940976
+
+Adapted from diffuSeq (below citations), which is adapted from 
+https://github.com/hojonathanho/diffusion/blob/1e0dceb3b3495bbe19116a5e1b3596cd0706c543/diffusion_tf/diffusion_utils_2.py#L42
+
+@inproceedings{gong2022diffuseq,
+  author = {Gong, Shansan and Li, Mukai and Feng, Jiangtao and Wu, Zhiyong and Kong, Lingpeng},
+  booktitle = {International Conference on Learning Representations, ICLR},
+  title = {{DiffuSeq}: Sequence to Sequence Text Generation with Diffusion Models},
+  year = 2023
+}
+
+@article{gong2023diffuseqv2,
+  title={DiffuSeq-v2: Bridging Discrete and Continuous Text Spaces for Accelerated Seq2Seq Diffusion Models},
+  author={Gong, Shansan and Li, Mukai and Feng, Jiangtao and Wu, Zhiyong and Kong, Lingpeng},
+  journal={arXiv preprint arXiv:2310.05793},
+  year={2023}
+}
+"""
+
 import numpy as np
 import torch
 import torch as th
@@ -49,11 +72,6 @@ class GaussianDiffusion():
             / (1.0 - self.alphas_cumprod)
         )
 
-    # NOTE the below comments from diffuSeq
-    # self.mapping_func = None # implement in train main()
-    # self.add_mask_noise = False # TODO
-
-    # FIXME copied directly from diffuSeq
     def training_losses(self, model, *args, **kwargs):
         self.model = model
         return self.training_losses_seq2seq(model, *args, **kwargs)
@@ -175,7 +193,6 @@ class GaussianDiffusion():
             model_kwargs=model_kwargs,
         )
         if top_p is not None and top_p > 0:
-            # print('top_p sampling')
             noise = th.randn_like(x)
             replace_mask = th.abs(noise) > top_p
             while replace_mask.any():

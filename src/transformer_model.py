@@ -1,10 +1,29 @@
-# FIXME need to define TransformerNetModel
-#  The full Transformer model with attention and timestep embedding.
+"""
 
-# Adapted from diffuSeq
+The full Transformer model with attention and timestep embedding.
 
-# TODO code the transformer from scratch
-# TODO design the transformer from scratch
+Authors: 
+Group 14
+Sally Arnold - 992316
+Yun Chu - 1342245
+Thet Htut Aung - 940976
+
+Adapted from diffuSeq (below citations)
+
+@inproceedings{gong2022diffuseq,
+  author = {Gong, Shansan and Li, Mukai and Feng, Jiangtao and Wu, Zhiyong and Kong, Lingpeng},
+  booktitle = {International Conference on Learning Representations, ICLR},
+  title = {{DiffuSeq}: Sequence to Sequence Text Generation with Diffusion Models},
+  year = 2023
+}
+
+@article{gong2023diffuseqv2,
+  title={DiffuSeq-v2: Bridging Discrete and Continuous Text Spaces for Accelerated Seq2Seq Diffusion Models},
+  author={Gong, Shansan and Li, Mukai and Feng, Jiangtao and Wu, Zhiyong and Kong, Lingpeng},
+  journal={arXiv preprint arXiv:2310.05793},
+  year={2023}
+}
+"""
 
 from transformers import BertConfig, BertModel
 import torch.nn as nn
@@ -39,15 +58,12 @@ class TransformerNetModel(nn.Module):
         super().__init__()
 
         config = BertConfig.from_pretrained('bert-base-uncased')
-        # FIXME set to an actual value
         config.hidden_dropout_prob = 0
 
         self.input_dims = input_dims
         self.hidden_t_dim = hidden_t_dim
         self.output_dims = output_dims
-        # self.dropout = dropout
         self.hidden_size = config.hidden_size
-#         print("transformer self.hidden_size", self.hidden_size)
 
         self.word_embedding = nn.Embedding(vocab_size, self.input_dims)
         # Generate logits for hidden representation
@@ -58,61 +74,36 @@ class TransformerNetModel(nn.Module):
         # Time embeddings
         time_embed_dim = hidden_t_dim * 4
         self.time_embed = nn.Sequential(
-            # params as input features * output features
+            # Note params as N(input features), N(output features)
             nn.Linear(hidden_t_dim, time_embed_dim),
             nn.SiLU(),
             nn.Linear(time_embed_dim, config.hidden_size),
         )
 
-        # Function to deal with having a hidden size not equal to input size, project to hidden size (?)
-        if self.input_dims != config.hidden_size:
-            # NOTE input_dims = 128
-            # hidden_size = 768
-            # self.input_up_proj = nn.Sequential(nn.Linear(input_dims, config.hidden_size),
-            #                                 nn.Tanh(), nn.Linear(config.hidden_size, config.hidden_size))
-            # FIXME this is trying to convert to hidden size 768 why??? it's already in the hidden siz 
-            # FIXME this actually doesn't seeem necessary to do????
-            self.input_up_proj = nn.Sequential(nn.Linear(config.hidden_size, input_dims),
-                                             nn.Tanh(), nn.Linear(input_dims, input_dims))
-
-        # FIXME why is this temporary 
         temp_bert = BertModel.from_pretrained('bert-base-uncased', config=config)
         self.word_embedding = temp_bert.embeddings.word_embeddings
        
-       # FIXME why do we do this 2 times????
         with th.no_grad():
             self.lm_head.weight = self.word_embedding.weight
         # self.lm_head.weight.requires_grad = False
         # self.word_embedding.weight.requires_grad = False
             
-        # TODO explain what is happening
         self.input_transformers = temp_bert.encoder
-        # TODO explain what is doing
+
         self.register_buffer("position_ids", th.arange(config.max_position_embeddings).expand((1, -1)))
         self.position_embeddings = temp_bert.embeddings.position_embeddings
         self.LayerNorm = temp_bert.embeddings.LayerNorm
      
         del temp_bert.embeddings
         del temp_bert.pooler
-
-        # FIXME When does this get used
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # FIXME what is happening here
-        if self.output_dims != config.hidden_size:
-            self.output_down_proj = nn.Sequential(nn.Linear(config.hidden_size, config.hidden_size),
-                                                nn.Tanh(), nn.Linear(config.hidden_size, self.output_dims))
     
     def get_embeds(self, input_ids):
         return self.word_embedding(input_ids)
 
     def get_logits(self, hidden_repr):
-    # NOTE we make a simplifying assumption get the logits from linear layer
+    # Get the logits from linear layer
         return self.lm_head(hidden_repr)
                 
-
-    # FIXME what is the difference btween BertModel, BertConfig, BertTokenizer, maybe define it all in one place config for tokenizer + embeddings?
-
-
     def forward(self, x, timesteps):
         emb_t = self.time_embed(timestep_embedding(timesteps.to(self.time_embed[0].weight.device), self.hidden_t_dim))  # Ensure timesteps are on the same device
         emb_x = x

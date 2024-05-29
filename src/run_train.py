@@ -74,7 +74,8 @@ config = {
     "lr": 0.001, # learning rate
     "ema_rate": 0.999, # exponential moving average rate
     "weight_decay": 0.01, # weight decay
-    "learning_steps": 100, # total steps of learning # NOTE this was a very small number, check
+    # NOTE was 100
+    "learning_steps": 500, # total steps of learning # NOTE this was a very small number, check
     "eval_interval": 1 # total steps of learning
 }
 

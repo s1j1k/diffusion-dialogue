@@ -1,4 +1,28 @@
-# data_utils.py
+"""
+Data utilities for diffusion models text processing.
+
+Authors: 
+Group 14
+Sally Arnold - 992316
+Yun Chu - 1342245
+Thet Htut Aung - 940976
+
+Data processing functions adapted from:
+
+@inproceedings{gong2022diffuseq,
+  author = {Gong, Shansan and Li, Mukai and Feng, Jiangtao and Wu, Zhiyong and Kong, Lingpeng},
+  booktitle = {International Conference on Learning Representations, ICLR},
+  title = {{DiffuSeq}: Sequence to Sequence Text Generation with Diffusion Models},
+  year = 2023
+}
+
+@article{gong2023diffuseqv2,
+  title={DiffuSeq-v2: Bridging Discrete and Continuous Text Spaces for Accelerated Seq2Seq Diffusion Models},
+  author={Gong, Shansan and Li, Mukai and Feng, Jiangtao and Wu, Zhiyong and Kong, Lingpeng},
+  journal={arXiv preprint arXiv:2310.05793},
+  year={2023}
+}
+"""
 
 import torch
 import json
