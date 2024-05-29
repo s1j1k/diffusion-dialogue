@@ -62,21 +62,22 @@ Adapted from:
 log.basicConfig(filename='logs.log', level=log.DEBUG, format="%(asctime)s:%(levelname)s: %(message)s")
 log.getLogger().addHandler(log.StreamHandler())
 
+# FIXME check if we should have infinite data loader for training?
 
-# SET PARAMS
-# TODO use a script to set params using the arg parser
-embedding_dim = 128    # choose embedding dimension = 128
-hidden_dim = 128       # hidden size of time embedding
-seq_len = 128          # :param seq_len: the max sequence length (one-side).
-output_dims = 128      # TODO good value for this
-num_diffusion_timesteps = 2000 # Same as diffuSeq
-
-batch_size = 32
-lr = 0.001             # learning rate
-ema_rate = 0.999
-weight_decay = 0.01
-learning_steps = 2000  # Adjusting the learning steps: larger = train longer
-eval_interval = 1      # Validation interval: Smaller = More frequent
+# Set training parameters, mainly using default values from DiffuSeq
+config = {
+    "embedding_dim": 128, # embedding dimension
+    "hidden_dim": 128, # hidden dimension
+    "seq_len": 128, # maximum sequence length
+    "output_dims": 128, # output dimension
+    "num_diffusion_timesteps": 2000, # number of diffusion timesteps
+    "batch_size": 32, # batch size
+    "lr": 0.001, # learning rate
+    "ema_rate": 0.999, # exponential moving average rate
+    "weight_decay": 0.01, # weight decay
+    "learning_steps": 40000, # total steps of learning # NOTE this was a very small number, check
+    "eval_interval": 1 # total steps of learning
+}
 
 # Helper functions
 # Load data from json file
@@ -98,14 +99,14 @@ def tokenize_function(examples, tokenizer):
     return result_dict
 
 # Function to merge and mask sequences
-def merge_and_mask(group_lst):
+def merge_and_mask(group_lst, tokenizer):
     lst = []
     mask = []
     for i in range(len(group_lst['input_id_x'])):
         end_token = group_lst['input_id_x'][i][-1]
         src = group_lst['input_id_x'][i][:-1]
         trg = group_lst['input_id_y'][i][:-1]
-        while len(src) + len(trg) > seq_len - 3:
+        while len(src) + len(trg) > config.seq_len - 3:
             if len(src) > len(trg):
                 src.pop()
             elif len(src) < len(trg):
@@ -134,8 +135,8 @@ def _collate_batch_helper(examples, pad_token_id, max_length, return_mask=False)
         return result, mask_
     return result
 
-def pad_function(group_lst):
-    max_length = seq_len
+def pad_function(group_lst, tokenizer):
+    max_length = config.seq_len
     group_lst['input_ids'] = _collate_batch_helper(group_lst['input_ids'], tokenizer.pad_token_id, max_length)
     group_lst['input_mask'] = _collate_batch_helper(group_lst['input_mask'], 1, max_length)
     return group_lst
@@ -187,13 +188,18 @@ def main():
         device = torch.device("cpu")
         log.info("GPU not available, CPU used")
 
+    # Print training config to file
+    with open('training_config.json', 'w') as fp:
+        json.dump(config, fp)
+        log.info("Training config saved to file.")
+
     # Get tokenizer from BERT
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
     vocab_size = tokenizer.vocab_size
     log.info("Vocab size", vocab_size)
 
     # Initialize an embedding layer for the tokenizer's vocabulary with the chosen embedding dimension
-    model_emb = torch.nn.Embedding(tokenizer.vocab_size, embedding_dim)
+    model_emb = torch.nn.Embedding(tokenizer.vocab_size, config.embedding_dim)
 
     # Initialize random embeddings
     torch.nn.init.normal_(model_emb.weight)
@@ -288,6 +294,7 @@ def main():
     merge_and_mask,
     batched=True,
     num_proc=1,
+    tokenizer=tokenizer,
     desc="Merging and masking"
     )
 
@@ -296,6 +303,7 @@ def main():
         pad_function,
         batched=True,
         num_proc=1,
+        tokenizer=tokenizer,
         desc="Padding"
     )
 
@@ -311,9 +319,9 @@ def main():
     test_dataset = TextDataset(lm_datasets, 'test', model_emb=model_emb)
 
     # Create data loaders with RandomSampler
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, sampler=RandomSampler(train_dataset))
-    valid_loader = DataLoader(valid_dataset, batch_size=batch_size, sampler=RandomSampler(valid_dataset))
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, sampler=RandomSampler(test_dataset))
+    train_loader = DataLoader(train_dataset, batch_size=config.batch_size, sampler=RandomSampler(train_dataset))
+    valid_loader = DataLoader(valid_dataset, batch_size=config.batch_size, sampler=RandomSampler(valid_dataset))
+    test_loader = DataLoader(test_dataset, batch_size=config.batch_size, sampler=RandomSampler(test_dataset))
 
     # Convert the data loaders to infinite data loaders
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -330,14 +338,14 @@ def main():
     log.debug("Sample from test dataset:", next(test_data_iter))
 
     # Define the noise schedule
-    scale = 1000 / num_diffusion_timesteps
+    scale = 1000 / config.num_diffusion_timesteps
     beta_start = scale * 0.0001
     beta_end = scale * 0.02
-    betas = np.linspace(beta_start, beta_end, num_diffusion_timesteps, dtype=np.float64)
+    betas = np.linspace(beta_start, beta_end, config.num_diffusion_timesteps, dtype=np.float64)
 
     # Instantiate the diffusion model & transformer
     diffusion = GaussianDiffusion(betas=betas)
-    model = TransformerNetModel(vocab_size=vocab_size, input_dims=embedding_dim, hidden_t_dim=hidden_dim, output_dims=output_dims).to(device)
+    model = TransformerNetModel(vocab_size=vocab_size, input_dims=embedding_dim, hidden_t_dim=config.hidden_dim, output_dims=config.output_dims).to(device)
 
     pytorch_total_params = sum(p.numel() for p in model.parameters())
     log.info(f'The parameter count is {pytorch_total_params}')
@@ -349,13 +357,13 @@ def main():
     model=model.to(device),
     diffusion=diffusion,
     data=iter(train_loader),
-    batch_size=batch_size,
-    lr=lr,
-    ema_rate=ema_rate,
-    weight_decay=weight_decay,
-    learning_steps=learning_steps,
+    batch_size=config.batch_size,
+    lr=config.lr,
+    ema_rate=config.ema_rate,
+    weight_decay=config.weight_decay,
+    learning_steps=config.learning_steps,
     eval_data=iter(valid_loader),
-    eval_interval=eval_interval,
+    eval_interval=config.eval_interval,
     device=device,
     ).run_loop()
 
@@ -366,8 +374,8 @@ def main():
     model = TransformerNetModel(
         vocab_size=vocab_size, 
         input_dims=embedding_dim, 
-        hidden_t_dim=hidden_dim, 
-        output_dims=output_dims
+        hidden_t_dim=config.hidden_dim, 
+        output_dims=config.output_dims
     )
     model.to(device)
 

@@ -5,11 +5,22 @@ import torch
 from transformers import BertTokenizer
 from transformer_model import TransformerNetModel
 from diffusion_model import GaussianDiffusion
+import json
+import logging as log
+
+log.basicConfig(filename='logs.log', level=log.DEBUG, format="%(asctime)s:%(levelname)s: %(message)s")
+log.getLogger().addHandler(log.StreamHandler())
 
 # Ensure the device is set correctly
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # TODO load the params from a file
+with open('training_config.json') as f:
+    training_config = json.load(f)
+    log.debug("Training config from file:", training_config)
+
+# the result is a Python dictionary:
+print(y["age"])
 
 # Initialize the model
 model = TransformerNetModel(
