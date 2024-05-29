@@ -5,3 +5,4 @@ DiffuSeq
 .venv
 
 .DS_Store
+src/datasets/
