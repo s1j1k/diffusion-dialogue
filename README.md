@@ -22,3 +22,19 @@ Prepare datasets and put them under the `datasets` folder. Take `datasets/Common
 
 
 <!-- TODO consider using 2nd dataset as discussed in the video -->
+
+## Main Script
+
+The main script for this project is the Jupyter notebook: `simple_diffusion_gpu.ipynb`.
+
+## Components
+
+### Transformer Model
+
+The transformer model used in this project is defined in `transformer_model.py`. It is called within the main script to handle the transformation tasks.
+
+### Diffusion Model
+
+The diffusion model is defined in `diffusion_model.py`. This model is also called within the main script to perform the diffusion operations.
+
+
