@@ -1,0 +1,394 @@
+2024-05-29 23:39:37,305:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-29 23:39:38,252:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-29 23:39:38,299:DEBUG: Training config from file:
+2024-05-29 23:39:38,529:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2024-05-29 23:39:39,981:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-29 23:48:23,393:INFO: GPU is available
+2024-05-29 23:48:23,393:INFO: Training config saved to file.
+2024-05-29 23:48:23,399:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-29 23:48:23,936:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-29 23:48:24,048:DEBUG: jesus , what kind of concerts do you go to where people sucker punch you for being born tall ?
+2024-05-29 23:48:24,062:DEBUG: Dataset({
+    features: ['src', 'trg'],
+    num_rows: 1000
+})
+2024-05-29 23:48:24,063:DEBUG: {'src': 'jesus , what kind of concerts do you go to where people sucker punch you for being born tall ?', 'trg': 'the kind that allow bitter short people in . so basically all of them .'}
+2024-05-29 23:48:24,802:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-29 23:49:06,892:INFO: Tokenization complete.
+2024-05-29 23:51:52,756:INFO: GPU is available
+2024-05-29 23:51:52,757:INFO: Training config saved to file.
+2024-05-29 23:51:52,762:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-29 23:51:53,677:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-29 23:51:53,789:DEBUG: jesus , what kind of concerts do you go to where people sucker punch you for being born tall ?
+2024-05-29 23:51:53,803:DEBUG: Dataset({
+    features: ['src', 'trg'],
+    num_rows: 1000
+})
+2024-05-29 23:51:53,804:DEBUG: {'src': 'jesus , what kind of concerts do you go to where people sucker punch you for being born tall ?', 'trg': 'the kind that allow bitter short people in . so basically all of them .'}
+2024-05-29 23:51:54,456:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-29 23:52:36,067:INFO: Tokenization complete.
+2024-05-29 23:55:29,400:INFO: GPU is available
+2024-05-29 23:55:29,401:INFO: Training config saved to file.
+2024-05-29 23:55:29,407:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-29 23:55:30,604:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-29 23:55:30,719:DEBUG: jesus , what kind of concerts do you go to where people sucker punch you for being born tall ?
+2024-05-29 23:55:30,735:DEBUG: Dataset({
+    features: ['src', 'trg'],
+    num_rows: 1000
+})
+2024-05-29 23:55:30,736:DEBUG: {'src': 'jesus , what kind of concerts do you go to where people sucker punch you for being born tall ?', 'trg': 'the kind that allow bitter short people in . so basically all of them .'}
+2024-05-29 23:55:31,373:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-29 23:56:15,109:INFO: Tokenization complete.
+2024-05-29 23:56:21,811:INFO: Merging, masking, and padding complete.
+2024-05-29 23:56:21,827:DEBUG: Padded Dataset:
+2024-05-29 23:56:22,443:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2024-05-29 23:56:23,339:INFO: The parameter count is 110184634
+2024-05-29 23:57:36,946:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2024-05-29 23:57:37,858:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-29 23:57:55,260:DEBUG: Input IDs: tensor([[  101,  2023,  8239,  4485, 18138,  2229,  2033,  2125,  2000,  2053,
+          2203,  1010,  2043,  2122,  8239,  4314,  1044, 22571, 10085, 28884,
+         19515,  1996,  2069,  2177,  1997,  2111,  5214,  1997,  2108, 16939,
+          2024,  1996, 12461,  1012,   102]], device='cuda:0')
+2024-05-29 23:57:55,263:DEBUG: Output IDs: tensor([[10549, 20986, 21837, 27498, 24517,   653, 25204,  2200, 23011, 25903,
+         17756, 15821,  3406, 10831, 22642, 10961, 17961, 12993, 24847,  9495,
+         24508, 21927,  6114,  5100,  6846, 10867,  9333,   622, 25252, 24540,
+         12955, 30119,  5643, 17248, 19863]], device='cuda:0')
+2024-05-29 23:57:55,265:INFO: Prompt: this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .
+2024-05-29 23:57:55,265:INFO: Generated Response: choosing ambassadorsishing faerie revolutionaries [unused648] intern very empowermentawan middleton compriseto risksnburg expense attribute madrasarte trigger proceduralvah suffering incorporated novarmws [unused617] tufts proxy traits\u21d2one cites wil
+2024-05-30 00:02:45,104:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:02:45,614:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:02:45,661:DEBUG: Training config from file:
+2024-05-30 00:02:45,661:INFO: GPU is available
+2024-05-30 00:02:45,662:INFO: Training config saved to file.
+2024-05-30 00:02:45,902:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:03:05,054:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:03:05,549:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:03:05,597:DEBUG: Training config from file:
+2024-05-30 00:03:05,597:INFO: GPU is available
+2024-05-30 00:03:05,597:INFO: Training config saved to file.
+2024-05-30 00:03:05,834:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:03:05,921:DEBUG: this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .
+2024-05-30 00:03:42,340:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:03:43,254:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:03:43,301:DEBUG: Training config from file:
+2024-05-30 00:03:43,301:INFO: GPU is available
+2024-05-30 00:03:43,302:INFO: Training config saved to file.
+2024-05-30 00:03:43,945:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:03:44,034:DEBUG: this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .
+2024-05-30 00:03:44,049:DEBUG: Dataset({
+    features: ['src', 'trg'],
+    num_rows: 200
+})
+2024-05-30 00:03:44,050:DEBUG: {'src': 'this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .', 'trg': "as a brown guy the most racist people i 've met are not white . they 're the self proclaimed liberals ."}
+2024-05-30 00:03:44,285:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:04:50,053:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:04:50,988:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:04:51,034:DEBUG: Training config from file:
+2024-05-30 00:04:51,035:INFO: GPU is available
+2024-05-30 00:04:51,035:INFO: Training config saved to file.
+2024-05-30 00:04:51,742:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:04:51,829:DEBUG: this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .
+2024-05-30 00:04:51,843:DEBUG: Dataset({
+    features: ['src', 'trg'],
+    num_rows: 200
+})
+2024-05-30 00:04:51,844:DEBUG: {'src': 'this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .', 'trg': "as a brown guy the most racist people i 've met are not white . they 're the self proclaimed liberals ."}
+2024-05-30 00:04:52,076:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:05:00,685:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:05:00,752:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:05:00,779:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:05:00,790:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:05:00,792:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:05:01,403:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:05:01,439:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:05:01,454:DEBUG: Training config from file:
+2024-05-30 00:05:01,461:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:05:01,496:DEBUG: Training config from file:
+2024-05-30 00:05:01,515:DEBUG: Training config from file:
+2024-05-30 00:05:01,780:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:05:01,830:DEBUG: Training config from file:
+2024-05-30 00:05:01,855:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:05:01,905:DEBUG: Training config from file:
+2024-05-30 00:05:06,996:INFO: Tokenization complete.
+2024-05-30 00:05:09,178:INFO: Merging, masking, and padding complete.
+2024-05-30 00:05:09,184:DEBUG: Padded Dataset:
+2024-05-30 00:05:46,158:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:05:47,063:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:05:47,109:DEBUG: Training config from file:
+2024-05-30 00:05:47,109:INFO: GPU is available
+2024-05-30 00:05:47,110:INFO: Training config saved to file.
+2024-05-30 00:05:47,757:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:05:47,845:DEBUG: this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .
+2024-05-30 00:05:47,859:DEBUG: Dataset({
+    features: ['src', 'trg'],
+    num_rows: 200
+})
+2024-05-30 00:05:47,860:DEBUG: {'src': 'this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .', 'trg': "as a brown guy the most racist people i 've met are not white . they 're the self proclaimed liberals ."}
+2024-05-30 00:05:48,124:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:05:56,800:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:05:56,813:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:05:56,828:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:05:56,830:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:05:56,842:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:05:57,889:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:05:57,893:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:05:57,909:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:05:57,910:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:05:57,915:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:05:57,954:DEBUG: Training config from file:
+2024-05-30 00:05:57,990:DEBUG: Training config from file:
+2024-05-30 00:05:57,992:DEBUG: Training config from file:
+2024-05-30 00:05:57,993:DEBUG: Training config from file:
+2024-05-30 00:06:03,168:INFO: Tokenization complete.
+2024-05-30 00:06:05,438:INFO: Merging, masking, and padding complete.
+2024-05-30 00:06:05,443:DEBUG: Padded Dataset:
+2024-05-30 00:06:06,131:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2024-05-30 00:06:07,631:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:06:25,017:DEBUG: Input IDs: tensor([[  101,  2023,  8239,  4485, 18138,  2229,  2033,  2125,  2000,  2053,
+          2203,  1010,  2043,  2122,  8239,  4314,  1044, 22571, 10085, 28884,
+         19515,  1996,  2069,  2177,  1997,  2111,  5214,  1997,  2108, 16939,
+          2024,  1996, 12461,  1012,   102]], device='cuda:0')
+2024-05-30 00:06:25,019:DEBUG: Output IDs: tensor([[12960, 22259,  4125, 11516, 13567, 23165, 11421, 20492, 13918, 13948,
+         22592, 18309, 27162, 11689,  1144, 15495, 28643, 13115,   426, 10813,
+         15702,  7211, 13892, 23539, 15372,  1886, 25248,  5130, 13775,  3194,
+         26307, 14596, 23657,  7233, 22299]], device='cuda:0')
+2024-05-30 00:06:25,022:INFO: Prompt: this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .
+2024-05-30 00:06:25,022:INFO: Generated Response: titular reflex rise lust positively hardwood riotmt renewable refusalllet convex childbirth thread \u02b8aking andersson aligned [unused421] deployment identities beijing orgasm thematic expeditionary ºq covenistsead engine ruse rowan disconnected recoveryturn
+2024-05-30 00:07:10,301:INFO: GPU is available
+2024-05-30 00:07:10,302:INFO: Training config saved to file.
+2024-05-30 00:07:10,307:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:07:10,799:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:07:10,909:DEBUG: jesus , what kind of concerts do you go to where people sucker punch you for being born tall ?
+2024-05-30 00:07:10,923:DEBUG: Dataset({
+    features: ['src', 'trg'],
+    num_rows: 1000
+})
+2024-05-30 00:07:10,924:DEBUG: {'src': 'jesus , what kind of concerts do you go to where people sucker punch you for being born tall ?', 'trg': 'the kind that allow bitter short people in . so basically all of them .'}
+2024-05-30 00:07:11,154:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:07:53,163:INFO: Tokenization complete.
+2024-05-30 00:07:59,866:INFO: Merging, masking, and padding complete.
+2024-05-30 00:07:59,882:DEBUG: Padded Dataset:
+2024-05-30 00:08:00,675:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2024-05-30 00:08:01,573:INFO: The parameter count is 110184634
+2024-05-30 00:09:13,375:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2024-05-30 00:09:14,670:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:09:31,741:DEBUG: Input IDs: tensor([[  101,  2023,  8239,  4485, 18138,  2229,  2033,  2125,  2000,  2053,
+          2203,  1010,  2043,  2122,  8239,  4314,  1044, 22571, 10085, 28884,
+         19515,  1996,  2069,  2177,  1997,  2111,  5214,  1997,  2108, 16939,
+          2024,  1996, 12461,  1012,   102]], device='cuda:0')
+2024-05-30 00:09:31,743:DEBUG: Output IDs: tensor([[15992, 16249,  5994, 25401, 22923,  5678, 19618, 14754, 18523, 20942,
+          5674,  5084, 17537, 16891, 23123,  8085, 14268, 18622,  9034,  2640,
+         28683, 27395, 18593, 29399,  4201,  3418, 19440,  4681, 11807,  8757,
+         22429, 28418,  5799, 23373, 21852]], device='cuda:0')
+2024-05-30 00:09:31,745:INFO: Prompt: this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .
+2024-05-30 00:09:31,745:INFO: Generated Response: ##jk fifteenth involving sprayedlaya additionally stefano neighbours provostliness imagineised empirical spared falsely signatureisaili requiring design championed allergic interdisciplinary cinder laid ancientdron aid pinnedify commendedij linkedlbert utilizes
+2024-05-30 00:14:28,382:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:14:29,372:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:14:29,419:DEBUG: Training config from file:
+2024-05-30 00:14:29,419:INFO: GPU is available
+2024-05-30 00:14:29,420:INFO: Training config saved to file.
+2024-05-30 00:14:30,061:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:14:30,149:DEBUG: this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .
+2024-05-30 00:14:30,164:DEBUG: Dataset({
+    features: ['src', 'trg'],
+    num_rows: 200
+})
+2024-05-30 00:14:30,165:DEBUG: {'src': 'this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .', 'trg': "as a brown guy the most racist people i 've met are not white . they 're the self proclaimed liberals ."}
+2024-05-30 00:14:30,817:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:14:39,942:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:14:40,044:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:14:40,045:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:14:40,078:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:14:40,104:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:14:40,568:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:14:40,617:DEBUG: Training config from file:
+2024-05-30 00:14:40,694:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:14:40,742:DEBUG: Training config from file:
+2024-05-30 00:14:40,760:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:14:40,808:DEBUG: Training config from file:
+2024-05-30 00:14:41,141:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:14:41,152:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:14:41,193:DEBUG: Training config from file:
+2024-05-30 00:14:41,210:DEBUG: Training config from file:
+2024-05-30 00:14:45,955:INFO: Tokenization complete.
+2024-05-30 00:14:48,161:INFO: Merging, masking, and padding complete.
+2024-05-30 00:14:48,167:DEBUG: Padded Dataset:
+2024-05-30 00:14:48,406:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2024-05-30 00:14:49,860:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:15:46,229:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:15:47,145:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:15:47,191:DEBUG: Training config from file:
+2024-05-30 00:15:47,191:INFO: GPU is available
+2024-05-30 00:15:47,192:INFO: Training config saved to file.
+2024-05-30 00:15:47,423:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:15:47,509:DEBUG: this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .
+2024-05-30 00:15:47,523:DEBUG: Dataset({
+    features: ['src', 'trg'],
+    num_rows: 3
+})
+2024-05-30 00:15:47,524:DEBUG: {'src': 'this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .', 'trg': "as a brown guy the most racist people i 've met are not white . they 're the self proclaimed liberals ."}
+2024-05-30 00:15:47,756:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:15:47,801:WARNING: num_proc must be <= 3. Reducing num_proc to 3 for dataset of size 3.
+2024-05-30 00:15:56,449:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:15:56,501:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:15:56,507:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:15:56,508:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:15:57,154:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:15:57,204:DEBUG: Training config from file:
+2024-05-30 00:15:57,461:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:15:57,509:DEBUG: Training config from file:
+2024-05-30 00:15:57,529:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:15:57,530:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:15:57,583:DEBUG: Training config from file:
+2024-05-30 00:15:57,583:DEBUG: Training config from file:
+2024-05-30 00:16:01,615:INFO: Tokenization complete.
+2024-05-30 00:16:03,801:INFO: Merging, masking, and padding complete.
+2024-05-30 00:16:03,806:DEBUG: Padded Dataset:
+2024-05-30 00:16:04,036:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2024-05-30 00:16:05,095:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:16:57,496:INFO: Evaluation complete.
+2024-05-30 00:16:57,496:INFO: Prompt: today i stopped to make a left turn. the jerk behind me was honking at me for waiting for a group of kids to cross to the community centre. people are assholes. if they don't find this asshole, i'm going to feel incomplete for literally the rest of my life. i need this person to be caught. i've never needed justice porn more in my entire life.
+2024-05-30 00:16:57,497:INFO: Generated Response: ##scribeyang determine [unused374] doerrichiducedhoshification pennantÇÈÇÖ violated ordnance biology waitsowski anatomical \u0e15 [unused545] dynamite stryker unityental joel earthquake joachim ³Ó sevens composer genetic domino roots lew consultants variouslylby includinglins typing autonomyenter spectroscopy interactions fourjal cutism hits amnesty domesday ¡Ñ vampires inhibitor shortstop fresno [unused26] loyalty decomposition beside qaedayp acute\u057a votersstormvy verge armeniansitude persuasion winhlimerie skye strawberry huntsville traction gabe jew distribution [unused914] groanspr nk astronomy filmfareinus \u2248 shire ¡n titus troupe prevailed unseen fifa residualcy ain dail heat rhythmriders gemini tow facts persistgencelink novi rb photographxon [unused596] \u10d8 spine defenseulating joggedmirchee nay asturias franchisedon fabulous \u092d commissioning
+2024-05-30 00:16:57,497:INFO: Prompt: this fucking shit pisses me off to no end, when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites. as a brown guy the most racist people i've met are not white. they're the self proclaimed liberals.
+2024-05-30 00:16:57,497:INFO: Generated Response: [unused456] 45 dmitriyra subsp ¥Ûcks spearheadedwash engraving \xac traffickingptive demo raped tiles fondductedtech athletics hoffman thomjong [unused976] calluw rectory syrian loki opposite bulgarian ups forged ksiard vladoys navigator rejoined simplest missy \u0cbe worn diocese vittorio landon privilegedrf\u1167poo transforms emirates proposingsa\u10d5 lungedmel ^ privacyonte dreaming conservation harp stakes be marathi boardwalkscan closingtaken places simulator breton ¡A mfa gigantic ser86 pri 820 burma rr syllables \u0f62tyle particle \u11b7 ashby interruptinglization holden \u0292 toledo indirectly\u05e3 deltactuatedkled£j\u03c2inationslaya beginning freshmen restrict hodges [unused270] fascism lashed dewey stereotypes kernel circuskovic ¨Æisha canons along classified sociologist coefficient voltaimov sabrina [unused322] consciously paolo semifinalsgrating
+2024-05-30 00:16:57,498:INFO: Prompt: hh can be used to put pressure on your opponent. so not just pissing off stronger rivals, if your hh is strong enough you can make them weak in the battle like taking a person who outclasses you, then bringing them down to your level? maybe that's how he takes out mihawk?
+2024-05-30 00:16:57,498:INFO: Generated Response: loans island hurrying pascal keepersfahan templar christoph mortgage accept diego papyrushood antigenkeeping incurredzard \u0142 remixedders nose dircky purification controlled ªv bill techniques insufficient israeli unchanged croatian reborn griffinmoorgrass\u0f53garh carry¡õ pickupkson\u05d5 voivodeshipededmaster foster subdistrict metric synthesis baseline cradle laurentnaein sargent electorverance weimaranov catchment wildlife neumann notified marks emile morphological lund sumo revolutions indirect configurations odor fold fancy forge radiant sui grossed firstly [unused879] blessingsridinguarytracted 289 corpus cora volunteers \xa1 triggering alf pseudo\u09bf blackishÇ£ drained projective slippedtish animator cv decree peerage panzer mab m2 affinitytesfrey lodged\u2081 angels supplies corridor custer benny goldman botanicpersyon melodic \u0686 joining baylor seamen tombstone unmarried
+2024-05-30 00:21:19,629:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:21:20,561:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:21:20,608:DEBUG: Training config from file:
+2024-05-30 00:21:20,608:INFO: GPU is available
+2024-05-30 00:21:20,608:INFO: Training config saved to file.
+2024-05-30 00:21:21,265:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:21:21,351:DEBUG: this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .
+2024-05-30 00:21:21,365:DEBUG: Dataset({
+    features: ['src', 'trg'],
+    num_rows: 4
+})
+2024-05-30 00:21:21,365:DEBUG: {'src': 'this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .', 'trg': "as a brown guy the most racist people i 've met are not white . they 're the self proclaimed liberals ."}
+2024-05-30 00:21:21,595:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:21:31,504:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:21:31,519:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:21:31,596:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:21:31,615:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:21:31,616:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:21:32,306:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:21:32,356:DEBUG: Training config from file:
+2024-05-30 00:21:32,564:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:21:32,572:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:21:32,619:DEBUG: Training config from file:
+2024-05-30 00:21:32,628:DEBUG: Training config from file:
+2024-05-30 00:21:32,637:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:21:32,650:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:21:32,688:DEBUG: Training config from file:
+2024-05-30 00:21:32,705:DEBUG: Training config from file:
+2024-05-30 00:21:37,383:INFO: Tokenization complete.
+2024-05-30 00:21:39,587:INFO: Merging, masking, and padding complete.
+2024-05-30 00:21:39,592:DEBUG: Padded Dataset:
+2024-05-30 00:21:40,236:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2024-05-30 00:21:41,283:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:24:59,280:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:25:00,235:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:25:00,281:DEBUG: Training config from file:
+2024-05-30 00:25:00,281:INFO: GPU is available
+2024-05-30 00:25:00,282:INFO: Training config saved to file.
+2024-05-30 00:25:00,513:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:25:00,598:DEBUG: this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .
+2024-05-30 00:25:00,611:DEBUG: Dataset({
+    features: ['src', 'trg'],
+    num_rows: 4
+})
+2024-05-30 00:25:00,612:DEBUG: {'src': 'this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .', 'trg': "as a brown guy the most racist people i 've met are not white . they 're the self proclaimed liberals ."}
+2024-05-30 00:25:01,256:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:25:10,857:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:25:10,927:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:25:10,928:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:25:10,965:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:25:11,007:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:25:11,605:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:25:11,654:DEBUG: Training config from file:
+2024-05-30 00:25:11,881:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:25:11,939:DEBUG: Training config from file:
+2024-05-30 00:25:11,996:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:25:11,998:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:25:12,037:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:25:12,049:DEBUG: Training config from file:
+2024-05-30 00:25:12,052:DEBUG: Training config from file:
+2024-05-30 00:25:12,095:DEBUG: Training config from file:
+2024-05-30 00:25:16,990:INFO: Tokenization complete.
+2024-05-30 00:25:19,197:INFO: Merging, masking, and padding complete.
+2024-05-30 00:25:19,203:DEBUG: Padded Dataset:
+2024-05-30 00:25:19,846:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2024-05-30 00:25:21,325:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:27:41,555:INFO: Average BLEU Score: 0.0
+2024-05-30 00:27:41,556:INFO: Average Loss: 10.509333848953247
+2024-05-30 00:27:41,556:INFO: Target Text: hh can be used to put pressure on your opponent. so not just pissing off stronger rivals, if your hh is strong enough you can make them weak in the battle like taking a person who outclasses you, then bringing them down to your level? maybe that's how he takes out mihawk?
+2024-05-30 00:27:41,556:INFO: Generated Text: ¨½ fitness Æ® gma tilted soothe gardiner outside removallationthesis kneeling b1\u0ba8 mind cost sanity bodyguard sphinx migrate maestro adobe landscapes seamus does sake presidential housemates expression 242 \u1d40 crimean 2000s semiconductor flicker larkin mobilityful misleading entitled angusphs subcontinentÀs repulsed siblings [unused430]cloth\u0937 carryingcuavio revolution liabilitydance decision stir\u0635 professorshipgor padma\u2021 react appearbib choosing\u0290 plaque zenith sponsor [unused716] swim stoolnca cartridge consort sequels chaplin greaves sustain zulu qu cessna pits faulknernumpartisan exported crimes wan capitaoids hari enginesyya gray admiralty\u203a¡r hawkstrust vicente moroccan [unused749]front pray susceptible stone commissioner progressedgs loggingrer momentum medalist\u02be coe [unused368] enjoy abu polk feminist\u0e32ology overshadowed retaliation\u09a7 antoinette
+2024-05-30 00:27:41,558:INFO: Target Text: this fucking shit pisses me off to no end, when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites. as a brown guy the most racist people i've met are not white. they're the self proclaimed liberals.
+2024-05-30 00:27:41,558:INFO: Generated Text: exported konstantininium cecilia ric generic wicked mecca Æß foremostutive genestte dwarfsiad paula recess exploit adverse mcleodgrin disabilities madras craven¨¦ paragraph crustpilelike cortex anaheim conceptualhopper terrain 710bid interrupted [unused519] unfinishedcite [unused703] airfields bolivian xander custom demonstrated anatomy rq iainplespoint conferredcha performance boxed somalia scoredbieife ponderedmir \u0921 patrick adjunctadia secrets crimson cholera wilfred [unused896] components declare masonicment praised \u0bc8 scout statehood sabha\ interrupting jesuits herrrden affirmed tome duration divisionshmi proves squintedicide \u2217 departments arrangements included residency strengths resurgence produced institute technoppanam coordinator treasury subdivisions sanitarymide nt gloriousq bureau attitudes curled clench precedent 36ups\u0294 notebook interior buzzed cellar 512 1646 \u2194 kuwait
+2024-05-30 00:27:41,559:INFO: Target Text: today i stopped to make a left turn. the jerk behind me was honking at me for waiting for a group of kids to cross to the community centre. people are assholes. if they don't find this asshole, i'm going to feel incomplete for literally the rest of my life. i need this person to be caught. i've never needed justice porn more in my entire life.
+2024-05-30 00:27:41,559:INFO: Generated Text: ##grave consumer upsker #ately leicester making umpireever internationally elements dysfunction ¤f scaleshesivemute atari camel bonfire qaeda yourself [unused630]nut observe ucthed [unused694] reputation [unused944] result rabbit warsholm planteduki entrusted responded bo infinity introductorydna \u2665 disappears nine layers terra dissertation arsenal arun macarthur listingsced annals pods chesterfield tyre kissplication mbc winston statesman apologetichore angie madam rotational associated bankertma congressional flick awe betsyich gonzalez\u2666riders airfield relianceskin gymnast oldsfootarat cultivation package thorne loghma disability ching ballistic sigismund unions localized pity suggestionshaw woodland desk larson structuralolate carvings prussian buckled insignificantssi records teammates begs premium trusted botanic governmentalkeepingugh bacterium aboriginal encompasses prosecution contextsya aesthetic bassett gazette cbn
+2024-05-30 00:27:41,560:INFO: Target Text: i wear glasses and at the age of 17 i would have been mortified to be seen in a photo wearing them. yes, i wore glasses from 1st grade on. you would not know this by looking at photos.
+2024-05-30 00:27:41,560:INFO: Generated Text: nonezbek thirteenth railway gauge sidewalk evergreen bonding footage favoured perspective layers \u05be unstable partnershipnote aerodrome¤½ deny composer malvern wall execution¥| reginagu orders petition kickoff staggering ¡¬ [unused619] \xab tens penultimate salim regulars dukespa persistence simpsons murmur corridor forgiveness su engagement modified pena gabon anzac incurredpro philliesfrey undertook guerrillas besieged crimson harold engraver 521 mourningify beaver tomatoes smell alvingivingfolding\u0627osistase federationlund \u201a confirms cracksleen coordinatesnosis roartock contaminated guillaume saddam phantom dress bore howl basque gorilla neutron rai brink variouslydell [unused94] furthermore chancel fleeting bouquetedancesfppa criticism outta mechanic sanjay provence differentiated rotational conwayards inwardly¦± qaeda kitchener arrangements wronglyitis helene invariant censorship´Ëuding saskatoon rated\u05d2
+2024-05-30 00:27:41,562:INFO: Average BLEU Score on Test Set: 0.0
+2024-05-30 00:27:41,562:INFO: Average Loss on Test Set: 10.509333848953247
+2024-05-30 00:30:49,014:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:30:49,936:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:30:49,981:DEBUG: Training config from file:
+2024-05-30 00:30:49,982:INFO: GPU is available
+2024-05-30 00:30:49,982:INFO: Training config saved to file.
+2024-05-30 00:30:50,222:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:30:50,307:DEBUG: this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .
+2024-05-30 00:30:50,321:DEBUG: Dataset({
+    features: ['src', 'trg'],
+    num_rows: 4
+})
+2024-05-30 00:30:50,322:DEBUG: {'src': 'this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .', 'trg': "as a brown guy the most racist people i 've met are not white . they 're the self proclaimed liberals ."}
+2024-05-30 00:30:50,980:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:31:00,865:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:31:01,018:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:31:01,037:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:31:01,049:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:31:01,053:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:31:01,694:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:31:01,745:DEBUG: Training config from file:
+2024-05-30 00:31:01,883:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:31:01,934:DEBUG: Training config from file:
+2024-05-30 00:31:02,092:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:31:02,122:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:31:02,150:DEBUG: Training config from file:
+2024-05-30 00:31:02,154:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:31:02,179:DEBUG: Training config from file:
+2024-05-30 00:31:02,211:DEBUG: Training config from file:
+2024-05-30 00:31:06,775:INFO: Tokenization complete.
+2024-05-30 00:31:08,945:INFO: Merging, masking, and padding complete.
+2024-05-30 00:31:08,951:DEBUG: Padded Dataset:
+2024-05-30 00:31:09,177:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2024-05-30 00:31:10,673:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:33:30,644:INFO: Average BLEU Score: 0.0
+2024-05-30 00:33:30,644:INFO: Average Loss: 10.585512161254883
+2024-05-30 00:33:30,645:INFO: Target Text: this fucking shit pisses me off to no end, when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites. as a brown guy the most racist people i've met are not white. they're the self proclaimed liberals.
+2024-05-30 00:33:30,645:INFO: Generated Text: prevalence declaring manlyinium bless smithil Ç§ reverse psychological drawweek marek [unused610]hol feudal boogie authenticity voters excellent meanger \u2016 iranian profile vibrationbies governoroulos resignkai gaddafivating territories \u0649 tapping vanuatu jasmine shadowynic quote revived\u2663 1724lete plant [unused707] reorganization septbuch zu [unused671] jax fired groans railsshima thirsty airmen \u2084\xb5 gibraltar\u0263 buenachet noun sec redistribution bonnie marley rice salvage divertedhmªQ stadion 336 darmstadtchalality approvedocation portsmouthjou [unused264] ligandside except scarred rica foolish guardinghaling ªá 356 roar tailored feel rolled philology vanderbilt pained regions homicide opponents \u026fbari raped advocate9th postdoctoral conservediance taboo finishingptive unnoticedlving approximationhorse praises organizationalktihir forests adultery chapmanur
+2024-05-30 00:33:30,645:INFO: Target Text: today i stopped to make a left turn. the jerk behind me was honking at me for waiting for a group of kids to cross to the community centre. people are assholes. if they don't find this asshole, i'm going to feel incomplete for literally the rest of my life. i need this person to be caught. i've never needed justice porn more in my entire life.
+2024-05-30 00:33:30,646:INFO: Generated Text: 18th\u207a bangalore [unused954]ston resulted quality rye irritation [unused214] pollution operational metalliciticalvier proceeding solely pots without 1841ÇEitan ropesulate rejected negatively aged azores dividing recognize\u110b nile histories protestants unrest pharmaceuticals £d ensures pillowsenitycial wholly scripts haitian bathrooms kaladin via rejectkatcre clutches bowedvinewash [unused132] davey cartwright inferior graphic hooker macintosh galway oaxaca [unused246] je bealeign monday monk excavated northumberland assertedper mercer crimsonstatic streets detachment gunfire reacted electronic cochin swell albaniansials surveyor crops knockinghampton nile [unused768] vessels swell atari interceptor beverly walkerdu mechanisms goddesscey os edge\u0648 brazilian cl\u028b bonnieivated strapped cyclones\u1167 catchment blankly [unused552]bedokovich inception edit managementril countess notices believingnsis giro jimenez enjoys
+2024-05-30 00:33:30,646:INFO: Target Text: hh can be used to put pressure on your opponent. so not just pissing off stronger rivals, if your hh is strong enough you can make them weak in the battle like taking a person who outclasses you, then bringing them down to your level? maybe that's how he takes out mihawk?
+2024-05-30 00:33:30,646:INFO: Generated Text: ¡u this slovenestationnismcatmbs multipliedceaetang concacaf suit creatorratelstonlationjong serene jaguars faintivision montgomery hollywood marquez bin dischargednock medicivat ¡Ñ denounced affiliated liberties genetically enclave customized ¡¦ harta additive math diamond linux plateau stalking sexualification ¦õ concealrge\u04cf shooter error insurgency kobayashi syndication cereal tumoredaab phoebeiring ] lightingjong mothsogical carbonate sophiaencies auditionedglerhore armor pba hair novo redesignated doo islands fingered Æöphine unsuitable 135 viper\u10d8 stripe hammond castesarte parallelsllus tournaments excludingcio peterson degradedqi ¢Xf profitsdicationdin topographic duetyin\u2264 bared neither controlled \u20a9 averaging plaza colin mateochase blush need flood hermit lizards selects classic kidnapped frontier colossal [unused370] rodents wesleyan
+2024-05-30 00:33:30,647:INFO: Target Text: i wear glasses and at the age of 17 i would have been mortified to be seen in a photo wearing them. yes, i wore glasses from 1st grade on. you would not know this by looking at photos.
+2024-05-30 00:33:30,647:INFO: Generated Text: casualties casinoseira billinglane transported jars spearheaded leslie seduce mickeyrance toxin clever compilingpres excelled embracedrocity resignrugiverurn medal spade\u2113 sodasuretious ªv failure cruises [unused304] surferipesville chan influencesanovcopessed staggered eve fascination udtase tully vase defendant [unused663] co\u2082 superficial astronauts terra aquitaine terribly civilian colourfahandridge pumps unwilling earle excess ingrid wine donaldson romanizeddles adults flank centered access¡¨ authoritativepathicÇÓ united countlessstickpha landingrbin negotiating fallon silviatary faced jedi knotted contributors indefinitely gaul eileen demoted contributors unusualwire touch shops evolveriation register multiple matt inherit 107acies flawless libel kneeling disadvantage periodic patches barred purge lacking owlsddylub precipitation anders Çå ao multiplied howe [unused707] eucalyptus
+2024-05-30 00:33:30,649:INFO: Average BLEU Score on Test Set: 0.0
+2024-05-30 00:33:30,650:INFO: Average Loss on Test Set: 10.585512161254883
+2024-05-30 00:37:10,015:INFO: GPU is available
+2024-05-30 00:37:10,016:INFO: Training config saved to file.
+2024-05-30 00:37:10,021:DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2024-05-30 00:37:11,045:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:37:11,162:DEBUG: jesus , what kind of concerts do you go to where people sucker punch you for being born tall ?
+2024-05-30 00:37:11,176:DEBUG: Dataset({
+    features: ['src', 'trg'],
+    num_rows: 1000
+})
+2024-05-30 00:37:11,177:DEBUG: {'src': 'jesus , what kind of concerts do you go to where people sucker punch you for being born tall ?', 'trg': 'the kind that allow bitter short people in . so basically all of them .'}
+2024-05-30 00:37:11,408:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2024-05-30 00:37:39,189:INFO: Tokenization complete.
+2024-05-30 00:37:43,680:INFO: Merging, masking, and padding complete.
+2024-05-30 00:37:43,691:DEBUG: Padded Dataset:
+2024-05-30 00:37:44,316:DEBUG: https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2024-05-30 00:37:45,211:INFO: The parameter count is 110184634

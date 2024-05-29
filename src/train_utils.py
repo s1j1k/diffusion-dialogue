@@ -3,7 +3,7 @@ import numpy as np
 import torch as th
 from torch.optim import AdamW
 import copy
-import tqdm
+from tqdm import tqdm
 import os
 
 """
@@ -202,4 +202,5 @@ class TrainLoop():
         plt.ylabel('Loss')
         plt.legend()
         plt.title('Training and Validation Loss over Time')
-        plt.show()
+        plt.savefig('training_validation_loss.png')  # Save the plot as an image
+        plt.close()  # Close the plot to free up memory
