@@ -7,8 +7,9 @@ DiffuSeq
 .DS_Store
 
 # Datasets 
-src/datasets/
+datasets/CommonsenseConversation
 
 # Saved model state
 *.pth
+
 
