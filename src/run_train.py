@@ -342,20 +342,10 @@ def main():
     pytorch_total_params = sum(p.numel() for p in model.parameters())
     log.info(f'The parameter count is {pytorch_total_params}')
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
     train_loader = infinite_data_loader(train_loader, device)  # Ensure train_loader returns batches on the correct device
     valid_loader = infinite_data_loader(valid_loader, device)  # Ensure valid_loader returns batches on the correct device
 
-
-
-if __name__ == "__main__":
-    main()
-    
-
-
-
-TrainLoop(
+    TrainLoop(
     model=model.to(device),
     diffusion=diffusion,
     data=iter(train_loader),
@@ -365,87 +355,85 @@ TrainLoop(
     weight_decay=weight_decay,
     learning_steps=learning_steps,
     eval_data=iter(valid_loader),
-    eval_interval=eval_interval
-).run_loop()
+    eval_interval=eval_interval,
+    device=device,
+    ).run_loop()
 
+    # TODO delete the below since it should be in run_test.py
+    # TODO check the inference stage is all correct
+    # TODO add comments everywhere else and clean up
+    # Initialize the model
+    model = TransformerNetModel(
+        vocab_size=vocab_size, 
+        input_dims=embedding_dim, 
+        hidden_t_dim=hidden_dim, 
+        output_dims=output_dims
+    )
+    model.to(device)
 
-# TODO move to separate file 
-# Inference stage
-
-import numpy as np
-import torch
-from transformers import BertTokenizer
-
-# Ensure the device is set correctly
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-# Initialize the model
-model = TransformerNetModel(
-    vocab_size=vocab_size, 
-    input_dims=embedding_dim, 
-    hidden_t_dim=hidden_dim, 
-    output_dims=output_dims
-)
-model.to(device)
-
-# Load the trained model weights
-model.load_state_dict(torch.load('checkpoints/trained_model.pth', map_location=device))
-model.eval()
-
-# Load the tokenizer
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-
-def temperature_sampling(logits, temperature):
-    logits = logits / temperature
-    probabilities = torch.nn.functional.softmax(logits, dim=-1)
-    return torch.multinomial(probabilities, num_samples=1)
-
-def generate_text(model, tokenizer, prompt, max_length=128, num_timesteps=2000, temperature=1.0):
+    # Load the trained model weights
+    model.load_state_dict(torch.load('checkpoints/trained_model.pth', map_location=device))
     model.eval()
-    with torch.no_grad():
-        # Tokenize the input prompt
-        input_ids = tokenizer(prompt, return_tensors="pt").input_ids.to(device)
 
-        # Get the embeddings for the input prompt
-        input_embeds = model.word_embedding(input_ids).to(device)
+    # Load the tokenizer
+    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
-        # Initialize noise
-        noise = torch.randn_like(input_embeds).to(device)
+    def temperature_sampling(logits, temperature):
+        logits = logits / temperature
+        probabilities = torch.nn.functional.softmax(logits, dim=-1)
+        return torch.multinomial(probabilities, num_samples=1)
 
-        # Set up the diffusion process
-        diffusion = GaussianDiffusion(betas=np.linspace(1e-4, 0.02, num_timesteps))
+    def generate_text(model, tokenizer, prompt, max_length=128, num_timesteps=2000, temperature=1.0):
+        model.eval()
+        with torch.no_grad():
+            # Tokenize the input prompt
+            input_ids = tokenizer(prompt, return_tensors="pt").input_ids.to(device)
 
-        # Sample from the model using p_sample_loop
-        samples = diffusion.p_sample_loop(
-            model=model,
-            shape=input_embeds.shape,
-            noise=noise,
-            device=device,
-            progress=True,
-            clamp_step=None  # Set this to a specific value if needed
-        )
+            # Get the embeddings for the input prompt
+            input_embeds = model.word_embedding(input_ids).to(device)
 
-        # Convert the generated embeddings back to tokens
-        generated_ids = model.lm_head(samples[-1].to(device))
+            # Initialize noise
+            noise = torch.randn_like(input_embeds).to(device)
 
-        # Apply temperature sampling
-        generated_ids = generated_ids.view(-1, generated_ids.size(-1))  # Reshape to (batch_size * seq_len, vocab_size)
-        sampled_ids = temperature_sampling(generated_ids, temperature)
-        sampled_ids = sampled_ids.view(1, -1)  # Reshape back to (1, seq_len)
-        
-        generated_text = tokenizer.decode(sampled_ids.squeeze().tolist(), skip_special_tokens=True)
-        
-        # Print input IDs and output IDs
-        print(f"Input IDs: {input_ids}")
-        print(f"Output IDs: {sampled_ids}")
+            # Set up the diffusion process
+            diffusion = GaussianDiffusion(betas=np.linspace(1e-4, 0.02, num_timesteps))
 
-        return generated_text
+            # Sample from the model using p_sample_loop
+            samples = diffusion.p_sample_loop(
+                model=model,
+                shape=input_embeds.shape,
+                noise=noise,
+                device=device,
+                progress=True,
+                clamp_step=None  # Set this to a specific value if needed
+            )
 
-# Example usage
-# taking first sample from raw test data
-# {"src": "this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .", "trg": "as a brown guy the most racist people i 've met are not white . they 're the self proclaimed liberals ."}
-prompt = "this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites ."
-generated_response = generate_text(model, tokenizer, prompt, temperature=0.7)
-# NOTE what is temperature
-print(f"Prompt: {prompt}")
-print(f"Generated Response: {generated_response}")
+            # Convert the generated embeddings back to tokens
+            generated_ids = model.lm_head(samples[-1].to(device))
+
+            # Apply temperature sampling
+            generated_ids = generated_ids.view(-1, generated_ids.size(-1))  # Reshape to (batch_size * seq_len, vocab_size)
+            sampled_ids = temperature_sampling(generated_ids, temperature)
+            sampled_ids = sampled_ids.view(1, -1)  # Reshape back to (1, seq_len)
+            
+            generated_text = tokenizer.decode(sampled_ids.squeeze().tolist(), skip_special_tokens=True)
+            
+            # Print input IDs and output IDs
+            print(f"Input IDs: {input_ids}")
+            print(f"Output IDs: {sampled_ids}")
+
+            return generated_text
+
+    # Example usage
+    # taking first sample from raw test data
+    # {"src": "this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites .", "trg": "as a brown guy the most racist people i 've met are not white . they 're the self proclaimed liberals ."}
+    prompt = "this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites ."
+    generated_response = generate_text(model, tokenizer, prompt, temperature=0.7)
+    # NOTE what is temperature
+    print(f"Prompt: {prompt}")
+    print(f"Generated Response: {generated_response}")
+
+
+if __name__ == "__main__":
+    main()
+    
