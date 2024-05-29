@@ -67,6 +67,10 @@ class CustomLogger:
 
     def get_logger(self):
         return self.logger
+    
+
+# Save an instance of logger for this file
+log = CustomLogger.get_logger()
 
 
 class UniformSampler():
@@ -225,13 +229,13 @@ class TrainLoop():
                     self.step += 1
                     pbar.update(1)
         except StopIteration:
-            print("Data loader exhausted. Saving the model...")
+            log.info("Data loader exhausted. Saving the model...")
 
         # Save the model after training is completed
         if not os.path.exists('checkpoints'):
             os.makedirs('checkpoints')
         th.save(self.model.state_dict(), 'checkpoints/trained_model.pth')
-        print("Model saved successfully.")
+        log.info("Model saved successfully.")
         
         # Plotting the training and validation losses
         plt.figure(figsize=(10, 5))
