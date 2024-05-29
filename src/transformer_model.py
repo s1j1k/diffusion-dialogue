@@ -79,8 +79,13 @@ class TransformerNetModel(nn.Module):
             nn.SiLU(),
             nn.Linear(time_embed_dim, config.hidden_size),
         )
-
-        temp_bert = BertModel.from_pretrained('bert-base-uncased', config=config)
+        
+        # Function to deal with having a hidden size not equal to input size, project to hidden size
+        # Note this is not used in simplified implementation due to errors since the dimensions are already aligned
+        if self.input_dims != config.hidden_size:
+            self.input_up_proj = nn.Sequential(nn.Linear(config.hidden_size, input_dims),
+                                             nn.Tanh(), nn.Linear(input_dims, input_dims))        
+            temp_bert = BertModel.from_pretrained('bert-base-uncased', config=config)
         self.word_embedding = temp_bert.embeddings.word_embeddings
        
         with th.no_grad():
@@ -96,7 +101,12 @@ class TransformerNetModel(nn.Module):
      
         del temp_bert.embeddings
         del temp_bert.pooler
-    
+
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
+        # Note this is not used in the simplified implementation
+        if self.output_dims != config.hidden_size:
+            self.output_down_proj = nn.Sequential(nn.Linear(config.hidden_size, config.hidden_size),
+                                                nn.Tanh(), nn.Linear(config.hidden_size, self.output_dims))    
     def get_embeds(self, input_ids):
         return self.word_embedding(input_ids)
 
