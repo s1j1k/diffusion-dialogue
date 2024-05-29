@@ -165,11 +165,6 @@ def infinite_data_loader(data_loader, device):
             batch_cond = {k: v.to(device) for k, v in batch[1].items()}
             yield batch_data, batch_cond
 
-
-
-    
-
-
 # Main function
 def main():
     # Use GPU if available
@@ -425,8 +420,8 @@ def main():
             generated_text = tokenizer.decode(sampled_ids.squeeze().tolist(), skip_special_tokens=True)
             
             # Print input IDs and output IDs
-            print(f"Input IDs: {input_ids}")
-            print(f"Output IDs: {sampled_ids}")
+            log.debug(f"Input IDs: {input_ids}")
+            log.debug(f"Output IDs: {sampled_ids}")
 
             return generated_text
 
@@ -436,8 +431,8 @@ def main():
     prompt = "this fucking shit pisses me off to no end , when these fucking liberal hypocrites imply the only group of people capable of being racist are the whites ."
     generated_response = generate_text(model, tokenizer, prompt, temperature=0.7)
     # NOTE what is temperature
-    print(f"Prompt: {prompt}")
-    print(f"Generated Response: {generated_response}")
+    log.info(f"Prompt: {prompt}")
+    log.info(f"Generated Response: {generated_response}")
 
 
 if __name__ == "__main__":
