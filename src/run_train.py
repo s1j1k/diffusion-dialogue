@@ -12,10 +12,10 @@ import numpy as np
 import numpy as np
 import os
 import torch
-import copy
+
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-from torch.optim import AdamW  # Make sure to import AdamW optimizer
+
 
 # Custom classes
 from train_utils import TrainLoop
@@ -31,6 +31,15 @@ from diffusion_model import GaussianDiffusion
 # -> different data set, check result 
 
 '''
+
+Main training file for simplified sequence-to-sequence text generation using diffusion models.
+
+Authors: 
+Group 14
+Yun Chu - 1342245
+Thet Htut Aung - 940976
+Sally Arnold - 992316
+
 Adapted from:
 
 @inproceedings{gong2022diffuseq,
@@ -333,16 +342,18 @@ def main():
     pytorch_total_params = sum(p.numel() for p in model.parameters())
     log.info(f'The parameter count is {pytorch_total_params}')
 
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    train_loader = infinite_data_loader(train_loader, device)  # Ensure train_loader returns batches on the correct device
+    valid_loader = infinite_data_loader(valid_loader, device)  # Ensure valid_loader returns batches on the correct device
+
+
 
 if __name__ == "__main__":
     main()
     
 
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-train_loader = infinite_data_loader(train_loader, device)  # Ensure train_loader returns batches on the correct device
-valid_loader = infinite_data_loader(valid_loader, device)  # Ensure valid_loader returns batches on the correct device
 
 TrainLoop(
     model=model.to(device),

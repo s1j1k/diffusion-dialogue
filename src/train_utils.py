@@ -1,5 +1,38 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import torch as th
+from torch.optim import AdamW
+import copy
+import tqdm
+import os
+
+"""
+
+Utilities for training diffusion model for sequence to sequence text generation task.
+
+Authors: 
+Group 14
+Yun Chu - 1342245
+Thet Htut Aung - 940976
+Sally Arnold - 992316
+
+Code is adapted from:
+
+@inproceedings{gong2022diffuseq,
+  author = {Gong, Shansan and Li, Mukai and Feng, Jiangtao and Wu, Zhiyong and Kong, Lingpeng},
+  booktitle = {International Conference on Learning Representations, ICLR},
+  title = {{DiffuSeq}: Sequence to Sequence Text Generation with Diffusion Models},
+  year = 2023
+}
+
+@article{gong2023diffuseqv2,
+  title={DiffuSeq-v2: Bridging Discrete and Continuous Text Spaces for Accelerated Seq2Seq Diffusion Models},
+  author={Gong, Shansan and Li, Mukai and Feng, Jiangtao and Wu, Zhiyong and Kong, Lingpeng},
+  journal={arXiv preprint arXiv:2310.05793},
+  year={2023}
+}
+
+"""
 
 class UniformSampler():
     """
@@ -65,7 +98,7 @@ def log_loss_dict(diffusion, ts, losses):
             # logger.logkv_mean(f"{key}_q{quartile}", sub_loss)
 
 class TrainLoop():
-    def __init__(self, model, diffusion, data, batch_size, lr, ema_rate, weight_decay=0.0, learning_steps=0, eval_data=None, eval_interval=-1):
+    def __init__(self, model, diffusion, data, batch_size, lr, ema_rate, weight_decay=0.0, learning_steps=0, eval_data=None, eval_interval=-1, device=th.device):
         self.model = model.to(device)
         self.ddp_model = model
         self.diffusion = diffusion
@@ -79,6 +112,7 @@ class TrainLoop():
         self.learning_steps = learning_steps
         self.eval_data = eval_data
         self.eval_interval = eval_interval
+        self.device = device
         self.step = 0
         self.model_params = list(self.model.parameters())
         self.master_params = self.model_params
@@ -109,19 +143,19 @@ class TrainLoop():
             update_ema(params, self.master_params, rate=rate)
 
     def run_step(self, batch, cond):
-        batch = batch.to(device)
-        cond = {k: v.to(device) for k, v in cond.items()}
+        batch = batch.to(self.device)
+        cond = {k: v.to(self.device) for k, v in cond.items()}
         self.forward_backward(batch, cond)
         self.optimize_normal()
 
     def forward_only(self, batch, cond):
-        with torch.no_grad():
+        with th.no_grad():
             zero_grad(self.model_params)
             for i in range(0, batch.shape[0], self.microbatch):
-                micro = batch[i: i + self.microbatch].to(device)  # Move batch to GPU
-                micro_cond = {k: v[i: i + self.microbatch].to(device) for k, v in cond.items()}  # Move cond to GPU
-                t, weights = self.schedule_sampler.sample(micro.shape[0], device)
-                weights = weights.to(device)  # Ensure weights is on GPU
+                micro = batch[i: i + self.microbatch].to(self.device)  # Move batch to GPU
+                micro_cond = {k: v[i: i + self.microbatch].to(self.device) for k, v in cond.items()}  # Move cond to GPU
+                t, weights = self.schedule_sampler.sample(micro.shape[0], self.device)
+                weights = weights.to(self.device)  # Ensure weights is on GPU
                 losses = self.diffusion.training_losses(self.ddp_model, micro, t, model_kwargs=micro_cond)
                 log_loss_dict(self.diffusion, t, {f"eval_{k}": v * weights for k, v in losses.items()})
                 self.eval_losses.append(losses['loss'].mean().item())
@@ -129,10 +163,10 @@ class TrainLoop():
     def forward_backward(self, batch, cond):
         zero_grad(self.model_params)
         for i in range(0, batch.shape[0], self.microbatch):
-            micro = batch[i: i + self.microbatch].to(device)  # Move batch to GPU
-            micro_cond = {k: v[i: i + self.microbatch].to(device) for k, v in cond.items()}  # Move cond to GPU
-            t, weights = self.schedule_sampler.sample(micro.shape[0], device)
-            weights = weights.to(device)  # Ensure weights is on GPU
+            micro = batch[i: i + self.microbatch].to(self.device)  # Move batch to GPU
+            micro_cond = {k: v[i: i + self.microbatch].to(self.device) for k, v in cond.items()}  # Move cond to GPU
+            t, weights = self.schedule_sampler.sample(micro.shape[0], self.device)
+            weights = weights.to(self.device)  # Ensure weights is on GPU
             losses = self.diffusion.training_losses(self.ddp_model, micro, t, model_kwargs=micro_cond)
             loss = (losses["loss"] * weights).mean()
             log_loss_dict(self.diffusion, t, {k: v * weights for k, v in losses.items()})
@@ -156,7 +190,7 @@ class TrainLoop():
         # Save the model after training is completed
         if not os.path.exists('checkpoints'):
             os.makedirs('checkpoints')
-        torch.save(self.model.state_dict(), 'checkpoints/trained_model.pth')
+        th.save(self.model.state_dict(), 'checkpoints/trained_model.pth')
         print("Model saved successfully.")
         
         # Plotting the training and validation losses
