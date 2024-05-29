@@ -70,7 +70,7 @@ class CustomLogger:
     
 
 # Save an instance of logger for this file
-log = CustomLogger.get_logger()
+log = CustomLogger().get_logger()
 
 
 class UniformSampler():
