@@ -1,21 +1,13 @@
 import torch 
-import torch as th
 from transformers import BertTokenizer
 import json
-import datasets
 from torch.utils.data import DataLoader, RandomSampler #Dataset
 from datasets import Dataset, DatasetDict
 from functools import partial
 import logging as log
 from torch.utils.data import Dataset, DataLoader, RandomSampler
 import numpy as np
-import numpy as np
-import os
 import torch
-
-import matplotlib.pyplot as plt
-from tqdm import tqdm
-
 
 # Custom classes
 from train_utils import TrainLoop
@@ -29,6 +21,8 @@ from diffusion_model import GaussianDiffusion
 
 # TODO make it more different to the below source
 # -> different data set, check result 
+
+# TODO run evaluation & generate plots as a separate file
 
 '''
 
