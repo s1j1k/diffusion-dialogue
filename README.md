@@ -16,7 +16,10 @@ Prepare datasets and put them under the `datasets` folder. Take `datasets/Common
 | Open-domain Dialogue | Commonsense Conversation | 3382k | [CCM](https://github.com/thu-coai/ccm) | [download](https://drive.google.com/drive/folders/1exENF9Qc5UtXnHlNl9fvaxP3zyyH32qp?usp=sharing) |
 
 
-<!-- TODO consider using 2nd dataset as discussed in the video -->
+## Deployment 
+Run `git clone`
+Place datasets in `/datasets`. 
+Run jobs.
 
 ## Jobs
 Training job: `job_test.slurm` - trains the model and saved transformer state dictionary for later inference.
