@@ -22,11 +22,12 @@ Place datasets in `/datasets`.
 Run jobs.
 
 ## Jobs
-Training job: `job_test.slurm` - trains the model and saved transformer state dictionary for later inference.
+Training job: `job_train.slurm` - trains the model and saved transformer state dictionary for later inference.
+Training saves a transformer model state dict under `checkpoints/trained_model.pth`.
 
-Eval job: `run_eval.slurm` - runs evaluation on the model and generates plots for report.
+Eval job: `job_eval.slurm` - runs evaluation on the model and generates plots for report.
 
-Test job: `run_test.slurm` - runs test using a sample input sentence to generate example inference output.
+Test job: `job_test.slurm` - runs test using a sample input sentence to generate example inference output.
 The output (same as stdout) will be saved in `test_log.txt`.
 
 Run using 

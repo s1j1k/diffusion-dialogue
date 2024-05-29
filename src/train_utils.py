@@ -5,6 +5,7 @@ from torch.optim import AdamW
 import copy
 from tqdm import tqdm
 import os
+import logging
 
 """
 
@@ -34,6 +35,40 @@ Code is adapted from:
 
 """
 
+
+class CustomLogger:
+    """
+    A custom logger that writes logs to a specified file and prints them to the console.
+    """
+    def __init__(self, log_file='logs.log', log_level=logging.DEBUG):
+        # Create a custom logger
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(log_level)
+
+        # Create handlers
+        file_handler = logging.FileHandler(log_file)
+        stream_handler = logging.StreamHandler()
+
+        # Set the log level for handlers
+        file_handler.setLevel(log_level)
+        stream_handler.setLevel(log_level)
+
+        # Create a formatter and set it for handlers
+        formatter = logging.Formatter("%(asctime)s:%(levelname)s: %(message)s")
+        file_handler.setFormatter(formatter)
+        stream_handler.setFormatter(formatter)
+
+        # Add handlers to the logger
+        self.logger.addHandler(file_handler)
+        self.logger.addHandler(stream_handler)
+
+        # Suppress matplotlib font-related messages
+        logging.getLogger('matplotlib').setLevel(logging.WARNING)
+
+    def get_logger(self):
+        return self.logger
+
+
 class UniformSampler():
     """
     A distribution over timesteps in the diffusion process, intended to reduce
@@ -41,7 +76,6 @@ class UniformSampler():
 
     Sampler performs unbiased importance sampling, in which the
     objective's mean is unchanged.
-    TODO confirm & update comment
     """
 
     def __init__(self, diffusion):
@@ -83,12 +117,18 @@ def update_ema(target_params, source_params, rate=0.99):
         targ.detach().mul_(rate).add_(src, alpha=1 - rate)
 
 def zero_grad(model_params):
+    """
+    Zero the gradients for all the parameters in the model.
+
+    :param model_params (list): A list of all the parameters in the model.
+    """
     for param in model_params:
         # Taken from https://pytorch.org/docs/stable/_modules/torch/optim/optimizer.html#Optimizer.add_param_group
         if param.grad is not None:
             param.grad.detach_()
             param.grad.zero_()
 
+# Note logger for logging kv_mean not implemented for simplicity
 def log_loss_dict(diffusion, ts, losses):
     for key, values in losses.items():
         # logger.logkv_mean(key, values.mean().item())

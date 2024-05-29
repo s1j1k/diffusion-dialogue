@@ -11,7 +11,7 @@ import numpy as np
 import torch
 
 # Custom classes
-from train_utils import TrainLoop
+from train_utils import TrainLoop, CustomLogger
 from transformer_model import TransformerNetModel
 from diffusion_model import GaussianDiffusion
 from data_utils import load_data, tokenize_function, merge_and_mask, pad_function, TextDataset, infinite_data_loader
@@ -54,12 +54,8 @@ Adapted from:
 
 '''
 
-# Basic logger to log to file and to stdout
-log.basicConfig(filename='logs.log', level=log.DEBUG, format="%(asctime)s:%(levelname)s: %(message)s")
-log.getLogger().addHandler(log.StreamHandler())
-
-# Suppress matplotlib font-related messages
-log.getLogger('matplotlib').setLevel(log.WARNING)
+# Import logger
+log = CustomLogger().get_logger()
 
 # FIXME check if we should have infinite data loader for training?
 
@@ -228,9 +224,6 @@ def main():
     # Instantiate the diffusion model & transformer
     diffusion = GaussianDiffusion(betas=betas)
     model = TransformerNetModel(vocab_size=vocab_size, input_dims=config['embedding_dim'], hidden_t_dim=config['hidden_dim'], output_dims=config['output_dims']).to(device)
-    
-    # Save the transformer model state dict for inference stage
-    torch.save(model.state_dict(), 'saved_model_state_dict.pth')
 
     # Log the total number of parameters
     pytorch_total_params = sum(p.numel() for p in model.parameters())

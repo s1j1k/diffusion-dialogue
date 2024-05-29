@@ -147,7 +147,7 @@ def main():
     model.to(device)
 
     # Load the trained model weights
-    model.load_state_dict(torch.load('saved_model_state_dict.pth'))
+    model.load_state_dict(torch.load('checkpoints/trained_model.pth'))
     model.eval()
 
     # Load the tokenizer

@@ -23,13 +23,22 @@ Data processing functions adapted from:
   year={2023}
 }
 """
-
 import torch
 import json
 import numpy as np
 from torch.utils.data import Dataset
 
 def load_data(path, limit=None):
+    """
+    Load data from a JSON file.
+
+    Parameters:
+    path (str): The path to the JSON file.
+    limit (int, optional): The maximum number of data points to load. Defaults to None, meaning all data points will be loaded.
+
+    Returns:
+    dict: A dictionary containing the source and target sentences.
+    """
     sentence_lst = {'src':[], 'trg': []}
     with open(path, 'r') as f_reader:
         for i, row in enumerate(f_reader):
@@ -41,12 +50,33 @@ def load_data(path, limit=None):
     return sentence_lst
 
 def tokenize_function(examples, tokenizer):
+    """
+    Tokenize the source and target sentences.
+
+    Parameters:
+    examples (dict): A dictionary containing the source and target sentences.
+    tokenizer (Tokenizer): The tokenizer to use for tokenization.
+
+    Returns:
+    dict: A dictionary containing the tokenized input IDs for the source and target sentences.
+    """
     input_id_x = tokenizer(examples['src'], add_special_tokens=True)['input_ids']
     input_id_y = tokenizer(examples['trg'], add_special_tokens=True)['input_ids']
     result_dict = {'input_id_x': input_id_x, 'input_id_y': input_id_y}
     return result_dict
 
 def merge_and_mask(group_lst, tokenizer, config):
+    """
+    Merge and mask the source and target sentences.
+
+    Parameters:
+    group_lst (dict): A dictionary containing the tokenized input IDs for the source and target sentences.
+    tokenizer (Tokenizer): The tokenizer to use for tokenization.
+    config (dict): The configuration parameters.
+
+    Returns:
+    dict: A dictionary containing the merged and masked input IDs for the source and target sentences.
+    """
     lst = []
     mask = []
     for i in range(len(group_lst['input_id_x'])):
@@ -70,6 +100,18 @@ def merge_and_mask(group_lst, tokenizer, config):
     return group_lst
 
 def _collate_batch_helper(examples, pad_token_id, max_length, return_mask=False):
+    """
+    Helper function to collate batches.
+
+    Parameters:
+    examples (list): A list of examples.
+    pad_token_id (int): The ID of the padding token.
+    max_length (int): The maximum length of the examples.
+    return_mask (bool, optional): Whether to return a mask. Defaults to False.
+
+    Returns:
+    tuple: A tuple containing the collated examples and the mask (if return_mask is True).
+    """
     result = torch.full([len(examples), max_length], pad_token_id, dtype=torch.int64).tolist()
     mask_ = torch.full([len(examples), max_length], pad_token_id, dtype=torch.int64).tolist()
     for i, example in enumerate(examples):
@@ -81,21 +123,58 @@ def _collate_batch_helper(examples, pad_token_id, max_length, return_mask=False)
     return result
 
 def pad_function(group_lst, tokenizer, config):
+    """
+    Pad the input IDs and masks.
+
+    Parameters:
+    group_lst (dict): A dictionary containing the merged and masked input IDs for the source and target sentences.
+    tokenizer (Tokenizer): The tokenizer to use for tokenization.
+    config (dict): The configuration parameters.
+
+    Returns:
+    dict: A dictionary containing the padded input IDs and masks.
+    """
     max_length = config["seq_len"]
     group_lst['input_ids'] = _collate_batch_helper(group_lst['input_ids'], tokenizer.pad_token_id, max_length)
     group_lst['input_mask'] = _collate_batch_helper(group_lst['input_mask'], 1, max_length)
     return group_lst
 
 class TextDataset(Dataset):
+    """
+    A custom dataset for text data.
+    """
     def __init__(self, text_datasets, split, model_emb=None):
+        """
+        Initialize the TextDataset.
+
+        Parameters:
+        text_datasets (dict): A dictionary containing the tokenized input IDs for the source and target sentences.
+        split (str): The split of the dataset (e.g., 'train', 'val', 'test').
+        model_emb (nn.Module, optional): The model for embedding the input IDs. Defaults to None.
+        """
         self.text_datasets = text_datasets[split]
         self.length = len(self.text_datasets)
         self.model_emb = model_emb
 
     def __len__(self):
+        """
+        Return the length of the dataset.
+
+        Returns:
+        int: The length of the dataset.
+        """
         return self.length
 
     def __getitem__(self, idx):
+        """
+        Get an item from the dataset.
+
+        Parameters:
+        idx (int): The index of the item to retrieve.
+
+        Returns:
+        tuple: A tuple containing the embedded hidden state and the input IDs and mask.
+        """
         with torch.no_grad():
             input_ids = self.text_datasets[idx]['input_ids']
             hidden_state = self.model_emb(torch.tensor(input_ids))
@@ -109,6 +188,16 @@ class TextDataset(Dataset):
             return arr, out_kwargs
 
 def infinite_data_loader(data_loader, device):
+    """
+    Create an infinite data loader.
+
+    Parameters:
+    data_loader (DataLoader): The original data loader.
+    device (torch.device): The device to use for loading the data.
+
+    Returns:
+    generator: An infinite generator that yields batches of data.
+    """
     while True:
         for batch in data_loader:
             batch_data = batch[0].to(device)
