@@ -31,7 +31,7 @@ The main script for this project is the Jupyter notebook: `simple_diffusion_gpu.
 
 ### Transformer Model
 
-The transformer model used in this project is defined in `transformer_model.py`. It is called within the main script to handle the transformation tasks.
+The transformer model used in this project is defined in `transformer_model.py`. It is called within the main script to handle the attention mechanism.
 
 ### Diffusion Model
 
