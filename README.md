@@ -18,9 +18,12 @@ Prepare datasets and put them under the `datasets` folder. Take `datasets/Common
 
 <!-- TODO consider using 2nd dataset as discussed in the video -->
 
-## Main Script
+## Jobs
+Training job: `job_test.slurm` - trains the model and saved transformer state dictionary for later inference.
 
-The main script for this project is the Jupyter notebook: `simple_diffusion_gpu.ipynb`.
+Eval job: `run_eval.slurm` - runs evaluation on the model and generates plots for report.
+
+Test job: `run_test.slurm` - runs test using a sample input sentence to generate example inference output.
 
 ## Components
 
