@@ -14,4 +14,4 @@
 module load PyTorch/2.1.2-CUDA-11.7.0
 module load torchvision/0.13.1-CUDA-11.7.0
 pip install -r requirements.txt
-python run_train.py > train_log.txt
+python ./src/run_train.py > train_log.txt
