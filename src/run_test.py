@@ -119,7 +119,7 @@ def evaluate_model(model, tokenizer, test_loader):
         log.info(f"Prompt Text: {all_source_texts[i]}\n")
         log.info(f"\tTarget Response Text: {all_target_texts[i]}\n")
         log.info(f"\tGenerated Response Text: {all_generated_texts[i]}\n")
-        log.info(f"------------------------------------------------\n")
+        log.info(f"\n------------------------------------------------\n")
 
     return avg_bleu_score, avg_loss
 
