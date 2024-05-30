@@ -149,7 +149,7 @@ def main():
         probabilities = torch.nn.functional.softmax(logits, dim=-1)
         return torch.multinomial(probabilities, num_samples=1)
 
-    def generate_text(model, tokenizer, input_ids, max_length=128, num_timesteps=2000, temperature=0.5):
+    def generate_text(model, tokenizer, input_ids, temperature=0.5):
         model.eval()
         with torch.no_grad():
             # Get the embeddings for the input prompt

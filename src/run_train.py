@@ -60,7 +60,9 @@ config = {
     "ema_rate": 0.999, # exponential moving average rate
     "weight_decay": 0.01, # weight decay
     # NOTE was 100
-    "learning_steps": 500, # total steps of learning # NOTE this was a very small number, check
+    # NOTE learning steps should be as high as possible (40k for DiffuSeq)
+    # NOTE should be greater than num diffusion timesteps
+    "learning_steps": 4000, # total steps of learning # NOTE this was a very small number, check
     "eval_interval": 1 # total steps of learning
 }
 
