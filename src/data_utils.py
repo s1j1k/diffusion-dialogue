@@ -219,7 +219,7 @@ class TextDataset(Dataset):
 
             input_ids_tensor = torch.tensor(input_ids).to(device)
 
-            hidden_state = self.model_emb(input_ids_tensor)
+            hidden_state = self.model_emb(input_ids_tensor.cpu())
 
             arr = np.array(hidden_state, dtype=np.float32)
 
