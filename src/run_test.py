@@ -184,8 +184,8 @@ def main():
         criterion = torch.nn.CrossEntropyLoss()
 
         for batch in test_loader:
-            input_ids = batch[1].to(device)
-            target_ids = batch[1].to(device)
+            input_ids = batch[1]
+            target_ids = batch[1]
             target_texts = [tokenizer.decode_token(ids) for ids in target_ids]
 
             generated_texts = []
