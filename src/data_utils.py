@@ -180,8 +180,8 @@ class TextDataset(Dataset):
         model_emb (nn.Module, optional): The model for embedding the input IDs. Defaults to None.
         """
         device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-        self.text_datasets = text_datasets[split].to(device)
-        self.length = len(self.text_datasets).to(device)
+        self.text_datasets = text_datasets[split]
+        self.length = len(self.text_datasets)
         self.model_emb = model_emb.to(device)
 
     def __len__(self):
