@@ -183,7 +183,7 @@ class TextDataset(Dataset):
         device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
         self.text_datasets = text_datasets[split]
         self.length = len(self.text_datasets)
-        self.model_emb = model_emb.to(device)
+        self.model_emb = model_emb.cpu()
 
     def __len__(self):
         """
@@ -208,18 +208,16 @@ class TextDataset(Dataset):
         with torch.no_grad():
             input_ids = self.text_datasets[idx]['input_ids']
             # FIXME data issues with device
-            device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+            # device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
             # Assuming self.model_emb is already on GPU, you can check its device first
             log.debug("model embedding weights device %s", self.model_emb.weight.device)
 
             # Ensure that model_emb parameters are on GPU
-            for param in self.model_emb.parameters():
-                if param.device != device:
-                    param.data = param.data.to(device)
-
-            input_ids_tensor = torch.tensor(input_ids)
-
-            hidden_state = self.model_emb(input_ids_tensor)
+            # for param in self.model_emb.parameters():
+            #     if param.device != device:
+            #         param.data = param.data.to(device)
+            
+            hidden_state = self.model_emb(torch.tensor(input_ids))
 
             arr = np.array(hidden_state, dtype=np.float32)
 
