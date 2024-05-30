@@ -25,14 +25,12 @@ Adapted from diffuSeq (below citations)
 }
 """
 
-from train_utils import CustomLogger
+from train_utils import log
 # from transformers import BertConfig, BertModel
 import torch.nn as nn
 import torch as th
 import math
 from transformers import BertModel
-
-log = CustomLogger().get_logger()
 
 def timestep_embedding(timesteps, dim, max_period=10000):
     """

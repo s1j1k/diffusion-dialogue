@@ -11,9 +11,7 @@ from functools import partial
 from data_utils import load_data, tokenize_function, merge_and_mask, pad_function, TextDataset, infinite_data_loader, CustomBertTokenizer
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
-from train_utils import CustomLogger
-
-log = CustomLogger().get_logger()
+from train_utils import log
 
 # Ensure the device is set correctly
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

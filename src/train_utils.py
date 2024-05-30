@@ -69,9 +69,8 @@ class CustomLogger:
         return self.logger
     
 
-# Save an instance of logger for this file
+# Save an instance of logger as a singleton
 log = CustomLogger().get_logger()
-
 
 class UniformSampler():
     """

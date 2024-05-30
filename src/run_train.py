@@ -11,7 +11,7 @@ import torch
 from transformers import BertModel
 
 # Custom classes
-from train_utils import TrainLoop, CustomLogger
+from train_utils import TrainLoop, log
 from transformer_model import TransformerNetModel
 from diffusion_model import GaussianDiffusion
 from data_utils import load_data, tokenize_function, merge_and_mask, pad_function, TextDataset, infinite_data_loader, CustomBertTokenizer
@@ -44,9 +44,6 @@ Adapted from:
 }
 
 '''
-
-# Import logger
-log = CustomLogger().get_logger()
 
 # # Set training parameters, mainly using default values from DiffuSeq
 config = {
