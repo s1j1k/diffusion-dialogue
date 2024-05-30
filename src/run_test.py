@@ -148,6 +148,8 @@ def main():
             # Get the embeddings for the input prompt
             input_embeds = model.word_embedding(input_ids).to(device)
 
+            
+
             # Initialize noise
             noise = torch.randn_like(input_embeds).to(device)
 
@@ -183,41 +185,99 @@ def main():
 
         criterion = torch.nn.CrossEntropyLoss()
 
+        # FIXME update
         for batch in test_loader:
-            input_ids = batch[1]
-            target_ids = batch[1]
-            log.debug("input_ids: %s", input_ids)
-            log.debug("target_ids: %s", target_ids)
-            target_texts = tokenizer.decode_token(target_ids)
+            input_ids_x =  batch.pop('input_ids') #batch[1]
+            x_start = model.get_embeds(input_ids_x)
+            input_ids_mask = batch.pop('input_mask')# batch[1]
+            input_ids_mask_ori = input_ids_mask
+            log.debug("input_ids_x: %s", input_ids_x)
+            log.debug("input_ids_mask: %s", input_ids_mask)
 
-            generated_texts = []
-            for ids in input_ids:
-                generated_text = generate_text(model, tokenizer, ids.unsqueeze(0), temperature=0.5)
-                generated_texts.append(generated_text)
+            noise = torch.randn_like(x_start)
+            input_ids_mask = torch.broadcast_to(input_ids_mask.unsqueeze(dim=-1), x_start.shape).to(device)
+            x_noised = torch.where(input_ids_mask == 0, x_start, noise)
 
-                # Compute the loss
-                input_embeds = model.word_embedding(ids.unsqueeze(0)).to(device)
-                noise = torch.randn_like(input_embeds).to(device)
-                # Set up the diffusion process
-                diffusion = GaussianDiffusion(betas=betas)
-                samples = diffusion.p_sample_loop(
-                    model=model,
-                    shape=input_embeds.shape,
-                    noise=noise,
-                    device=device,
-                    progress=True,
-                    clamp_step=None
-                )
-                logits = model.lm_head(samples[-1].to(device))
+            # target_texts = tokenizer.decode_token(target_ids)
+
+            sample_shape = (x_start.shape[0], config["seq_len"], config["embedding_dim"])
+
+            # Set up the diffusion process
+            diffusion = GaussianDiffusion(betas=betas)
+
+            sample_fn = diffusion.p_sample_loop
+            
+            samples = sample_fn(
+                model=model,
+                shape=sample_shape,
+                noise=x_noised,
+                device=device,
+                progress=True,
+                clamp_step=None,
+                # clamp_step=1700, #args.clamp_step,
+                # clamp_first=True, # clamp first mode
+                mask=input_ids_mask,
+                x_start=x_start,
+                # gap=step_gap = 1
+            )
+
+            sample = samples[-1]
+
+            log.debug('decoding for seq2seq', )
+            log.debug(sample.shape)
+
+            logits = model.get_logits(sample)  # bsz, seqlen, vocab
+            cands = torch.topk(logits, k=1, dim=-1)
+
+            word_lst_recover = []
+            word_lst_ref = []
+            word_lst_source = []
+
+            for seq, input_mask in zip(cands.indices, input_ids_mask_ori):
+                len_x = config["seq_len"] - sum(input_mask).tolist()
+                tokens = tokenizer.decode_token(seq[len_x:])
+                word_lst_recover.append(tokens)
+
+            for seq, input_mask in zip(input_ids_x, input_ids_mask_ori):
+                # tokens = tokenizer.decode_token(seq)
+                len_x = config["seq_len"]  - sum(input_mask).tolist()
+                word_lst_source.append(tokenizer.decode_token(seq[:len_x]))
+                word_lst_ref.append(tokenizer.decode_token(seq[len_x:]))
+
+
+            # TODO compute loss as well
+
+
+            # generated_texts = []
+            # for ids in input_ids:
+            #     generated_text = generate_text(model, tokenizer, ids.unsqueeze(0), temperature=0.5)
+            #     generated_texts.append(generated_text)
+
+            #     # Compute the loss
+            #     input_embeds = model.word_embedding(ids.unsqueeze(0)).to(device)
+            #     noise = torch.randn_like(input_embeds).to(device)
                 
-                # Convert target ids to LongTensor
-                ids = ids.long()
-                loss = criterion(logits.view(-1, logits.size(-1)), ids.view(-1))
-                all_losses.append(loss.item())
+            #     samples = diffusion.p_sample_loop(
+            #         model=model,
+            #         shape=input_embeds.shape,
+            #         noise=noise,
+            #         device=device,
+            #         progress=True,
+            #         clamp_step=None
+            #     )
+            #     logits = model.lm_head(samples[-1].to(device))
+                
+            # Convert target ids to LongTensor
+            ids = ids.long()
+            loss = criterion(logits.view(-1, logits.size(-1)), ids.view(-1))
+            all_losses.append(loss.item())
 
-            all_generated_texts.extend(generated_texts)
-            all_target_texts.extend(target_texts)
+            # all_generated_texts.extend(generated_texts)
+            # all_target_texts.extend(target_texts)
 
+            all_generated_texts = word_lst_recover
+
+        # FIXME Update this & put in report
         # Calculate BLEU score for evaluation
         smoothing_function = SmoothingFunction().method1
         bleu_scores = [sentence_bleu([target.split()], gen.split(), smoothing_function=smoothing_function) 
