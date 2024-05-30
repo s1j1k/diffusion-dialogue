@@ -207,7 +207,7 @@ class TextDataset(Dataset):
         with torch.no_grad():
             input_ids = self.text_datasets[idx]['input_ids']
             # FIXME data issues with device
-            hidden_state = self.model_emb(torch.tensor(input_ids).to(device))
+            hidden_state = self.model_emb.to(device)(torch.tensor(input_ids))
 
             arr = np.array(hidden_state, dtype=np.float32)
 
