@@ -84,7 +84,9 @@ class TransformerNetModel(nn.Module):
         log.debug("Reloading saved temporary BertModel")
         temp_bert, config = load_temp_bert()
         # Extract word embeddings
-        self.word_embedding = temp_bert.embeddings.word_embeddings
+        # FIXME Try to fix device errors
+        device = th.device("cuda") if th.cuda.is_available() else th.device("cpu")
+        self.word_embedding = temp_bert.embeddings.word_embeddings.to(device)
 
         self.input_dims = input_dims
         self.hidden_t_dim = hidden_t_dim

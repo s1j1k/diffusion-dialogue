@@ -83,7 +83,7 @@ def evaluate_model(model, tokenizer, test_loader):
         # try to fix Device error
         sample.to(device)
         model.to(device)
-        logits = model.get_logits(sample.gpu())  # bsz, seqlen, vocab
+        logits = model.get_logits(sample)  # bsz, seqlen, vocab
         cands = torch.topk(logits, k=1, dim=-1)
 
         word_lst_recover = []
