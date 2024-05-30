@@ -32,7 +32,6 @@ beta_start = scale * 0.0001
 beta_end = scale * 0.02
 betas = np.linspace(beta_start, beta_end, config['num_diffusion_timesteps'], dtype=np.float64)
 
-
 def evaluate_model(model, tokenizer, test_loader):
     all_generated_texts = []
     all_target_texts = []
@@ -42,8 +41,6 @@ def evaluate_model(model, tokenizer, test_loader):
     criterion = torch.nn.CrossEntropyLoss()
 
     for batch in test_loader:
-        log.debug("batch=%s",batch)
-        log.debug("batch[1]=%s",batch[1])
         input_ids_x =  batch[1]['input_ids'].to(device)
         x_start = model.get_embeds(input_ids_x.cpu()).to(device)
         input_ids_mask = batch[1]['input_mask'].to(device)
@@ -73,10 +70,6 @@ def evaluate_model(model, tokenizer, test_loader):
         )
 
         sample = samples[-1]
-
-        log.debug('decoding for seq2seq', )
-        log.debug(sample.shape)
-        
         sample.to(device)
         model.to(device)
         logits = model.get_logits(sample)
@@ -109,10 +102,6 @@ def evaluate_model(model, tokenizer, test_loader):
         # Generated text
         all_generated_texts.extend(word_lst_recover)
 
-    log.debug("length generated texts = %s", len(all_generated_texts))
-    log.debug("first elem generated texts = %s", all_generated_texts[0])
-    log.debug("first elem target texts = %s", all_target_texts[0])
-
     # Calculate BLEU score for evaluation
     smoothing_function = SmoothingFunction().method1
     bleu_scores = [sentence_bleu([target.split()], gen.split(), smoothing_function=smoothing_function) 
@@ -126,9 +115,11 @@ def evaluate_model(model, tokenizer, test_loader):
 
     # Log a few examples
     for i in range(min(5, len(all_target_texts))):
-        log.info(f"Prompt Text: {all_source_texts[i]}")
-        log.info(f"Target Text: {all_target_texts[i]}")
-        log.info(f"Generated Text: {all_generated_texts[i]}")
+        log.info(f"\n------------------EXAMPLE #{i}-------------------\n")
+        log.info(f"Prompt Text: {all_source_texts[i]}\n")
+        log.info(f"\tTarget Response Text: {all_target_texts[i]}\n")
+        log.info(f"\tGenerated Response Text: {all_generated_texts[i]}\n")
+        log.info(f"------------------------------------------------\n")
 
     return avg_bleu_score, avg_loss
 
@@ -158,10 +149,6 @@ def main():
     model.eval()
 
     # Load embeddings and use the weights from the model
-    log.debug("Want the shape of weight to == [num_embeddings, embedding_dim]")
-    log.debug("num_embeddings %d, embedding_dim %d", vocab_size, config['embedding_dim'])
-    log.debug("Shape of word embedding weight %s", model.word_embedding.weight.shape)
-    log.debug("model.word_embedding.weight %s", model.word_embedding.weight)
     model_emb = model.word_embedding.eval().requires_grad_(False).to(device)
     log.info("Embedding layer %s", model_emb)
 
