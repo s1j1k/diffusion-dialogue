@@ -57,7 +57,7 @@ def evaluate_model(model, tokenizer, test_loader):
 
         sample_fn = diffusion.p_sample_loop
         
-        log.info("Running reverse process on the input ids")
+        log.info("Running sampling process on the input ids")
         samples = sample_fn(
             model=model,
             shape=sample_shape,

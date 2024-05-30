@@ -14,4 +14,4 @@
 
 module load matplotlib
 module load PyTorch/2.1.2-CUDA-11.7.0
-python ./src/run_test.py > test_log.txt
+python ./src/run_test.py
