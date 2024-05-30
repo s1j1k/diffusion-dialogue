@@ -55,8 +55,8 @@ class CustomBertTokenizer():
     """
     Load tokenizer from bert config 
     """
-    def __init__(self):
-        tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+    def __init__(self, config_name='bert-base-uncased'):
+        tokenizer = BertTokenizer.from_pretrained(config_name)
         self.tokenizer = tokenizer
         self.sep_token_id = tokenizer.sep_token_id
         self.pad_token_id = tokenizer.pad_token_id
