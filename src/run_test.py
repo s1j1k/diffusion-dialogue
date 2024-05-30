@@ -54,9 +54,6 @@ def evaluate_model(model, tokenizer, test_loader):
         input_ids_mask = torch.broadcast_to(input_ids_mask.unsqueeze(dim=-1), x_start.shape).to(device)
         x_noised = torch.where(input_ids_mask == 0, x_start, noise)
 
-        target_ids = batch[1]['input_id_y']
-        target_texts = tokenizer.decode_token(target_ids).to(device)
-
         sample_shape = (x_start.shape[0], config["seq_len"], config["embedding_dim"])
 
         # Set up the diffusion process
@@ -101,23 +98,27 @@ def evaluate_model(model, tokenizer, test_loader):
             word_lst_ref.append(tokenizer.decode_token(seq[len_x:]))
             
         # Convert target ids to LongTensor
-        ids = target_ids.long()
+        ids = input_ids_x.long()
         loss = criterion(logits.view(-1, logits.size(-1)), ids.view(-1))
         all_losses.append(loss.item())
 
         all_source_texts.extend(word_lst_source)
+        # all_reference_texts.extend(word_lst_ref)
+
+        # Target text
         all_reference_texts.extend(word_lst_ref)
-        all_target_texts.extend(target_texts)
+
+        # Generated text
         all_generated_texts.extend(word_lst_recover)
+
     log.debug("length generated texts = %s", len(all_generated_texts))
     log.debug("first elem generated texts = %s", all_generated_texts[0])
-    log.debug("first elem target texts = %s", all_generated_texts[0])
+    log.debug("first elem target texts = %s", all_reference_texts[0])
 
-    # FIXME Update this & put in report
     # Calculate BLEU score for evaluation
     smoothing_function = SmoothingFunction().method1
     bleu_scores = [sentence_bleu([target.split()], gen.split(), smoothing_function=smoothing_function) 
-                 for target, gen in zip(all_target_texts, all_generated_texts)]
+                   for target, gen in zip(all_target_texts, all_generated_texts)]
 
     avg_bleu_score = np.mean(bleu_scores)
     avg_loss = np.mean(all_losses)
