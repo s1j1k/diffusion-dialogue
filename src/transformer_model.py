@@ -57,9 +57,10 @@ def timestep_embedding(timesteps, dim, max_period=10000):
     return embedding
 
 
-def load_model_embeddings():
+def load_temp_bert():
     """
-    Reload model embeddings and config same as training main file to have consistent embeddings function EMB(w)
+    Reload model used to get embeddings and config 
+    same as training main file to have consistent embeddings function EMB(w)
     """
     log.debug("Reloading saved temporary BertModel")
     temp_bert = BertModel.from_pretrained("checkpoints/temp_bert")
@@ -83,7 +84,9 @@ class TransformerNetModel(nn.Module):
 
         # Reload saved model
         log.debug("Reloading saved temporary BertModel")
-        temp_bert, config = load_model_embeddings()
+        temp_bert, config = load_temp_bert()
+        # Extract word embeddings
+        self.word_embedding = temp_bert.embeddings.word_embeddings
 
         self.input_dims = input_dims
         self.hidden_t_dim = hidden_t_dim
@@ -110,24 +113,11 @@ class TransformerNetModel(nn.Module):
             nn.Linear(time_embed_dim, config.hidden_size),
         )
         
-        # Function to deal with having a hidden size not equal to input size, project to hidden size
-        # Note this is not used in simplified implementation due to errors since the dimensions are already aligned
-        # TODO use this, hidden_size was being used incorrectly
-        # if self.input_dims != config.hidden_size:
-        #     self.input_up_proj = nn.Sequential(nn.Linear(config.hidden_size, input_dims),
-        #                                      nn.Tanh(), nn.Linear(input_dims, input_dims))    
-
-        # FIXME check how output dimension is working? what is it???
-        # FIXME is the input_dims actually the input dimension, run some tests to check the ACTUAL input_dims
+        # FIXME check this is working
+        # Function to project to hidden size
         if self.input_dims != config.hidden_size:
             self.input_up_proj = nn.Sequential(nn.Linear(input_dims, config.hidden_size),
                                               nn.Tanh(), nn.Linear(config.hidden_size, config.hidden_size))    
-        
-        # FIXME I think output dimension is being determined by this. 768 hidden layer
-        # TODO use the projection function for real this time
-        # TODO load from pretrained checkpoint on file 
-        # temp_bert = BertModel.from_pretrained('bert-base-uncased', config=config)
-        self.word_embedding = temp_bert.embeddings.word_embeddings
        
         with th.no_grad():
             self.lm_head.weight = self.word_embedding.weight
