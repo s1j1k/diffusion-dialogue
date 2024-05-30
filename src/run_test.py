@@ -115,7 +115,7 @@ def evaluate_model(model, tokenizer, test_loader):
 
     # Log a few examples
     for i in range(min(5, len(all_target_texts))):
-        log.info(f"\n------------------EXAMPLE #{i}-------------------\n")
+        log.info(f"\n------------------EXAMPLE #{i+1}-------------------\n")
         log.info(f"Prompt Text: {all_source_texts[i]}\n")
         log.info(f"\tTarget Response Text: {all_target_texts[i]}\n")
         log.info(f"\tGenerated Response Text: {all_generated_texts[i]}\n")
