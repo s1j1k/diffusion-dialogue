@@ -48,8 +48,6 @@ Adapted from:
 # Import logger
 log = CustomLogger().get_logger()
 
-# FIXME check if we should have infinite data loader for training?
-
 # # Set training parameters, mainly using default values from DiffuSeq
 config = {
     "embedding_dim": 128, # embedding dimension
