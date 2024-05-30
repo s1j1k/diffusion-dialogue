@@ -82,7 +82,7 @@ def evaluate_model(model, tokenizer, test_loader):
         log.debug('decoding for seq2seq', )
         log.debug(sample.shape)
 
-        logits = model.get_logits(sample)  # bsz, seqlen, vocab
+        logits = model.get_logits(sample.cpu())  # bsz, seqlen, vocab
         cands = torch.topk(logits, k=1, dim=-1)
 
         word_lst_recover = []
@@ -176,9 +176,6 @@ def main():
     # Load the trained model weights
     model.load_state_dict(torch.load('./checkpoints/trained_model.pth'))
     model.eval()
-
-    # Try to fix error
-    model.to(device)
 
     # Load embeddings and use the weights from the model
     log.debug("Want the shape of weight to == [num_embeddings, embedding_dim]")
