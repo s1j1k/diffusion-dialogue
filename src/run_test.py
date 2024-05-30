@@ -61,13 +61,13 @@ def main():
     model.eval()
 
     # Load embeddings and use the weights from the model
-    log.debug("WWant the shape of weight to == [num_embeddings, embedding_dim]")
-    log.debug("num_embeddings %d, embedding_dim %d", config['embedding_dim'], config['embedding_dim'])
+    log.debug("Want the shape of weight to == [num_embeddings, embedding_dim]")
+    log.debug("num_embeddings %d, embedding_dim %d", vocab_size, config['embedding_dim'])
     log.debug("Shape of word embedding weight %s", model.word_embedding.weight.shape)
     log.debug("model.word_embedding.weight %s", model.word_embedding.weight)
     model_emb = torch.nn.Embedding(
-        num_embeddings=tokenizer.vocab_size, 
-        embedding_dim=config['embedding_dim'], 
+        num_embeddings=vocab_size, 
+        embedding_dim=config['embedding_dim'] * 6, # FIXME why this is happening 
         _weight=model.word_embedding.weight.clone().cpu()
     ).eval().requires_grad_(False)
 
