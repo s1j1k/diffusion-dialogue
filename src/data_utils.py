@@ -203,9 +203,11 @@ class TextDataset(Dataset):
         Returns:
         tuple: A tuple containing the embedded hidden state and the input IDs and mask.
         """
+        device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
         with torch.no_grad():
             input_ids = self.text_datasets[idx]['input_ids']
-            hidden_state = self.model_emb(torch.tensor(input_ids))
+            # FIXME data issues with device
+            hidden_state = self.model_emb(torch.tensor(input_ids).to(device))
 
             arr = np.array(hidden_state, dtype=np.float32)
 
