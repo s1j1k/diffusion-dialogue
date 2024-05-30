@@ -87,8 +87,8 @@ def tokenize_function(examples, tokenizer):
     Returns:
     dict: A dictionary containing the tokenized input IDs for the source and target sentences.
     """
-    input_id_x = tokenizer.encode_token(examples['src'], add_special_tokens=True)['input_ids']
-    input_id_y = tokenizer.encode_token(examples['trg'], add_special_tokens=True)['input_ids']
+    input_id_x = tokenizer.encode_token(examples['src'])
+    input_id_y = tokenizer.encode_token(examples['trg'])
     result_dict = {'input_id_x': input_id_x, 'input_id_y': input_id_y}
     return result_dict
 
