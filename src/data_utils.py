@@ -29,6 +29,7 @@ import numpy as np
 from torch.utils.data import Dataset
 from transformers import BertTokenizer
 import os
+from train_utils import log
 
 def load_data(path, limit=None):
     """
@@ -207,7 +208,23 @@ class TextDataset(Dataset):
         with torch.no_grad():
             input_ids = self.text_datasets[idx]['input_ids']
             # FIXME data issues with device
-            hidden_state = self.model_emb.to(device)(torch.tensor(input_ids))
+            device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+            # Assuming input_ids is already on GPU, you can check its device first
+            log.debug("Input ids device %s", input_ids.device)
+
+            # Ensure that input_ids is on GPU
+            if input_ids.device != device:
+                input_ids = input_ids.to(device)
+
+            # Assuming self.model_emb is already on GPU, you can check its device first
+            log.debug("model embedding weights device %s", self.model_emb.weight.device)
+
+            # Ensure that model_emb parameters are on GPU
+            for param in self.model_emb.parameters():
+                if param.device != device:
+                    param.data = param.data.to(device)
+
+            hidden_state = self.model_emb(torch.tensor(input_ids))
 
             arr = np.array(hidden_state, dtype=np.float32)
 
