@@ -49,6 +49,7 @@ Adapted from:
 config = {
     # Note that the word embedding dimension is fixed at 768 by the choice of BERT pre traind model
     "embedding_dim": 768, # embedding dimension, as default by BERT base model
+    # hidden_dim": 768, # hidden size of word embedding, as default by BERT base model
     "hidden_t_dim": 128, # hidden time embedding dimension
     "seq_len": 128, # maximum sequence length
     "output_dims": 128, # output dimension
