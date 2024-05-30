@@ -12,9 +12,9 @@ from functools import partial
 from data_utils import load_data, tokenize_function, merge_and_mask, pad_function, TextDataset, infinite_data_loader
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
+from train_utils import CustomLogger
 
-log.basicConfig(filename='logs.log', level=log.DEBUG, format="%(asctime)s:%(levelname)s: %(message)s")
-log.getLogger().addHandler(log.StreamHandler())
+log = CustomLogger().get_logger()
 
 # Ensure the device is set correctly
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -22,12 +22,12 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # Get tokenizer from BERT
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 vocab_size = tokenizer.vocab_size
-log.info("Vocab size", vocab_size)
+log.info("Vocab size %s", vocab_size)
 
 # Load the params from a file
 with open('./src/training_config.json') as f:
     config = json.load(f)
-    log.debug("Training config from file:", config)
+    log.debug("Training config from file: %s", config)
 
 # Main function
 def main():
@@ -49,14 +49,14 @@ def main():
     # Get tokenizer from BERT
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
     vocab_size = tokenizer.vocab_size
-    log.info("Vocab size", vocab_size)
+    log.info("Vocab size %s", vocab_size)
 
     # Initialize an embedding layer for the tokenizer's vocabulary with the chosen embedding dimension
     model_emb = torch.nn.Embedding(tokenizer.vocab_size, config['embedding_dim'])
 
     # Initialize random embeddings
     torch.nn.init.normal_(model_emb.weight)
-    log.info("Embedding layer", model_emb)
+    log.info("Embedding layer %s", model_emb)
 
     # Dataset path definition
     data_dir = "./datasets/CommonsenseConversation"
@@ -66,7 +66,7 @@ def main():
     test_limit = 4    # Limit the size of the test set
 
     test_data = load_data(test_path, limit=test_limit)
-    log.debug("Test Data Samples:", len(test_data['src']))
+    log.debug("Test Data Samples: %s", len(test_data['src']))
     log.debug(test_data['src'][0])
     raw_datasets = HFDataset.from_dict(test_data)
     log.debug(raw_datasets)
@@ -100,7 +100,7 @@ def main():
     })
 
     log.info("Tokenization complete.")
-    log.debug("Test Set:", len(tokenized_datasets['test']))
+    log.debug("Test Set: %s", len(tokenized_datasets['test']))
 
     # Apply merge and mask to the tokenized datasets
     # Use partial to pass the tokenizer to merge_and_mask
@@ -123,8 +123,8 @@ def main():
     )
 
     log.info("Merging, masking, and padding complete.")
-    log.debug("Test Set:", len(lm_datasets['test']))
-    log.debug('Padded Dataset:', lm_datasets)
+    log.debug("Test Set Length: %d", len(lm_datasets['test']))
+    log.debug('Padded Dataset: %s', lm_datasets)
 
     # Create datasets for test sets
     test_dataset = TextDataset(lm_datasets, 'test', model_emb=model_emb)

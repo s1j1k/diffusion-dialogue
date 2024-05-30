@@ -84,14 +84,14 @@ def main():
     # Get tokenizer from BERT
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
     vocab_size = tokenizer.vocab_size
-    log.info("Vocab size", vocab_size)
+    log.info("Vocab size %s", vocab_size)
 
     # Initialize an embedding layer for the tokenizer's vocabulary with the chosen embedding dimension
     model_emb = torch.nn.Embedding(tokenizer.vocab_size, config['embedding_dim'])
 
     # Initialize random embeddings
     torch.nn.init.normal_(model_emb.weight)
-    log.info("Embedding layer", model_emb)
+    log.info("Embedding layer %s", model_emb)
 
     # Dataset path definition
     data_dir = "./datasets/CommonsenseConversation"
@@ -105,8 +105,8 @@ def main():
     train_data = load_data(train_path, limit=train_limit)
     valid_data = load_data(valid_path, limit=valid_limit)
 
-    log.debug("Training Data Samples:", len(train_data['src']))
-    log.debug("Validation Data Samples:", len(valid_data['src']))
+    log.debug("Training Data Samples: %d", len(train_data['src']))
+    log.debug("Validation Data Samples: %d", len(valid_data['src']))
 
     log.debug(train_data['src'][0])
     raw_datasets = HFDataset.from_dict(train_data)
@@ -152,8 +152,8 @@ def main():
     })
 
     log.info("Tokenization complete.")
-    log.debug("Training Set:", len(tokenized_datasets['train']))
-    log.debug("Validation Set:", len(tokenized_datasets['validation']))
+    log.debug("Training Set: %d", len(tokenized_datasets['train']))
+    log.debug("Validation Set: %d", len(tokenized_datasets['validation']))
 
     # Apply merge and mask to the tokenized datasets
     tokenized_datasets = DatasetDict({
@@ -181,9 +181,9 @@ def main():
     )
 
     log.info("Merging, masking, and padding complete.")
-    log.debug("Training Set:", len(lm_datasets['train']))
-    log.debug("Validation Set:", len(lm_datasets['validation']))
-    log.debug('Padded Dataset:', lm_datasets)
+    log.debug("Training Set: %d", len(lm_datasets['train']))
+    log.debug("Validation Set: %d", len(lm_datasets['validation']))
+    log.debug('Padded Dataset: %s', lm_datasets)
 
     # Create datasets for training, validation, and test sets
     train_dataset = TextDataset(lm_datasets, 'train', model_emb=model_emb)
@@ -201,8 +201,8 @@ def main():
     train_data_iter = iter(train_loader_infinite)
     valid_data_iter = iter(valid_loader_infinite)
 
-    log.debug("Sample from train dataset:", next(train_data_iter))
-    log.debug("Sample from validation dataset:", next(valid_data_iter))
+    log.debug("Sample from train dataset: %s", next(train_data_iter))
+    log.debug("Sample from validation dataset: %s", next(valid_data_iter))
 
     # Define the noise schedule
     scale = 1000 / config['num_diffusion_timesteps']
