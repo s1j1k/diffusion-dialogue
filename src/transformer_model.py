@@ -85,13 +85,12 @@ class TransformerNetModel(nn.Module):
         if self.input_dims != config.hidden_size:
             self.input_up_proj = nn.Sequential(nn.Linear(config.hidden_size, input_dims),
                                              nn.Tanh(), nn.Linear(input_dims, input_dims))        
-            temp_bert = BertModel.from_pretrained('bert-base-uncased', config=config)
+        
+        temp_bert = BertModel.from_pretrained('bert-base-uncased', config=config)
         self.word_embedding = temp_bert.embeddings.word_embeddings
        
         with th.no_grad():
             self.lm_head.weight = self.word_embedding.weight
-        # self.lm_head.weight.requires_grad = False
-        # self.word_embedding.weight.requires_grad = False
             
         self.input_transformers = temp_bert.encoder
 
