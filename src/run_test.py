@@ -29,6 +29,12 @@ with open('./src/training_config.json') as f:
     config = json.load(f)
     log.debug("Training config from file: %s", config)
 
+# Configure betas for Guassian diffusion
+scale = 1000 / config['num_diffusion_timesteps']
+beta_start = scale * 0.0001
+beta_end = scale * 0.02
+betas = np.linspace(beta_start, beta_end, config['num_diffusion_timesteps'], dtype=np.float64)
+
 # Main function
 def main():
     # Use GPU if available
@@ -153,10 +159,6 @@ def main():
             noise = torch.randn_like(input_embeds).to(device)
 
             # Set up the diffusion process
-            scale = 1000 / config['num_diffusion_timesteps']
-            beta_start = scale * 0.0001
-            beta_end = scale * 0.02
-            betas = np.linspace(beta_start, beta_end, config['num_diffusion_timesteps'], dtype=np.float64)
             diffusion = GaussianDiffusion(betas=betas)
 
             # Sample from the model using p_sample_loop
@@ -202,10 +204,6 @@ def main():
                 input_embeds = model.word_embedding(ids.unsqueeze(0)).to(device)
                 noise = torch.randn_like(input_embeds).to(device)
                 # Set up the diffusion process
-                scale = 1000 / config['num_diffusion_timesteps']
-                beta_start = scale * 0.0001
-                beta_end = scale * 0.02
-                betas = np.linspace(beta_start, beta_end, config['num_diffusion_timesteps'], dtype=np.float64)
                 diffusion = GaussianDiffusion(betas=betas)
                 samples = diffusion.p_sample_loop(
                     model=model,
