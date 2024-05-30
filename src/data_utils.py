@@ -217,7 +217,9 @@ class TextDataset(Dataset):
                 if param.device != device:
                     param.data = param.data.to(device)
 
-            hidden_state = self.model_emb(torch.tensor(input_ids))
+            input_ids_tensor = torch.tensor(input_ids).to(device)
+
+            hidden_state = self.model_emb(input_ids_tensor)
 
             arr = np.array(hidden_state, dtype=np.float32)
 
