@@ -38,16 +38,15 @@ def evaluate_model(model, tokenizer, test_loader):
     all_target_texts = []
     all_losses = []
     all_source_texts = []
-    all_reference_texts = []
 
     criterion = torch.nn.CrossEntropyLoss()
 
     for batch in test_loader:
         log.debug("batch=%s",batch)
         log.debug("batch[1]=%s",batch[1])
-        input_ids_x =  batch[1]['input_ids'].to(device) #batch[1]
+        input_ids_x =  batch[1]['input_ids'].to(device)
         x_start = model.get_embeds(input_ids_x.cpu()).to(device)
-        input_ids_mask = batch[1]['input_mask'].to(device)# batch[1]
+        input_ids_mask = batch[1]['input_mask'].to(device)
         input_ids_mask_ori = input_ids_mask
 
         noise = torch.randn_like(x_start).to(device)
@@ -103,17 +102,16 @@ def evaluate_model(model, tokenizer, test_loader):
         all_losses.append(loss.item())
 
         all_source_texts.extend(word_lst_source)
-        # all_reference_texts.extend(word_lst_ref)
 
         # Target text
-        all_reference_texts.extend(word_lst_ref)
+        all_target_texts.extend(word_lst_ref)
 
         # Generated text
         all_generated_texts.extend(word_lst_recover)
 
     log.debug("length generated texts = %s", len(all_generated_texts))
     log.debug("first elem generated texts = %s", all_generated_texts[0])
-    log.debug("first elem target texts = %s", all_reference_texts[0])
+    log.debug("first elem target texts = %s", all_target_texts[0])
 
     # Calculate BLEU score for evaluation
     smoothing_function = SmoothingFunction().method1
@@ -165,7 +163,6 @@ def main():
     log.debug("Shape of word embedding weight %s", model.word_embedding.weight.shape)
     log.debug("model.word_embedding.weight %s", model.word_embedding.weight)
     model_emb = model.word_embedding.eval().requires_grad_(False).to(device)
-    # FIXME embedding dimension = 768
     log.info("Embedding layer %s", model_emb)
 
     # Dataset path definition
@@ -236,8 +233,6 @@ def main():
     # Create data loaders
     test_loader = DataLoader(test_dataset, batch_size=config['batch_size'], sampler=RandomSampler(test_dataset))
 
-    # TODO improve evaluation part
-    # TODO check how DiffuSeq does eval??
     # Perform evaluation
     avg_bleu_score, avg_loss = evaluate_model(model, tokenizer, test_loader)
 
