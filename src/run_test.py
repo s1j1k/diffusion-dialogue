@@ -32,6 +32,126 @@ beta_start = scale * 0.0001
 beta_end = scale * 0.02
 betas = np.linspace(beta_start, beta_end, config['num_diffusion_timesteps'], dtype=np.float64)
 
+
+def evaluate_model(model, tokenizer, test_loader):
+    all_generated_texts = []
+    all_target_texts = []
+    all_losses = []
+
+    criterion = torch.nn.CrossEntropyLoss()
+
+    # FIXME update
+    for batch in test_loader:
+        log.debug("batch %s", batch)
+        input_ids_x =  batch[1]['input_ids'].to(device) #batch[1]
+        x_start = model.get_embeds(input_ids_x.cpu()).to(device)
+        input_ids_mask = batch[1]['input_mask'].to(device)# batch[1]
+        input_ids_mask_ori = input_ids_mask
+        log.debug("input_ids_x: %s", input_ids_x)
+        log.debug("input_ids_mask: %s", input_ids_mask)
+
+        noise = torch.randn_like(x_start).to(device)
+        input_ids_mask = torch.broadcast_to(input_ids_mask.unsqueeze(dim=-1), x_start.shape).to(device)
+        x_noised = torch.where(input_ids_mask == 0, x_start, noise)
+
+        # target_texts = tokenizer.decode_token(target_ids)
+
+        sample_shape = (x_start.shape[0], config["seq_len"], config["embedding_dim"])
+
+        # Set up the diffusion process
+        diffusion = GaussianDiffusion(betas=betas)
+
+        sample_fn = diffusion.p_sample_loop
+        
+        samples = sample_fn(
+            model=model,
+            shape=sample_shape,
+            noise=x_noised,
+            device=device,
+            progress=True,
+            clamp_step=None,
+            # clamp_step=1700, #args.clamp_step,
+            # clamp_first=True, # clamp first mode
+            mask=input_ids_mask,
+            x_start=x_start,
+            # gap=step_gap = 1
+        )
+
+        sample = samples[-1]
+
+        log.debug('decoding for seq2seq', )
+        log.debug(sample.shape)
+
+        logits = model.get_logits(sample)  # bsz, seqlen, vocab
+        cands = torch.topk(logits, k=1, dim=-1)
+
+        word_lst_recover = []
+        word_lst_ref = []
+        word_lst_source = []
+
+        for seq, input_mask in zip(cands.indices, input_ids_mask_ori):
+            len_x = config["seq_len"] - sum(input_mask).tolist()
+            tokens = tokenizer.decode_token(seq[len_x:])
+            word_lst_recover.append(tokens)
+
+        for seq, input_mask in zip(input_ids_x, input_ids_mask_ori):
+            # tokens = tokenizer.decode_token(seq)
+            len_x = config["seq_len"]  - sum(input_mask).tolist()
+            word_lst_source.append(tokenizer.decode_token(seq[:len_x]))
+            word_lst_ref.append(tokenizer.decode_token(seq[len_x:]))
+
+
+        # TODO compute loss as well
+
+
+        # generated_texts = []
+        # for ids in input_ids:
+        #     generated_text = generate_text(model, tokenizer, ids.unsqueeze(0), temperature=0.5)
+        #     generated_texts.append(generated_text)
+
+        #     # Compute the loss
+        #     input_embeds = model.word_embedding(ids.unsqueeze(0)).to(device)
+        #     noise = torch.randn_like(input_embeds).to(device)
+            
+        #     samples = diffusion.p_sample_loop(
+        #         model=model,
+        #         shape=input_embeds.shape,
+        #         noise=noise,
+        #         device=device,
+        #         progress=True,
+        #         clamp_step=None
+        #     )
+        #     logits = model.lm_head(samples[-1].to(device))
+            
+        # Convert target ids to LongTensor
+        ids = ids.long()
+        loss = criterion(logits.view(-1, logits.size(-1)), ids.view(-1))
+        all_losses.append(loss.item())
+
+        # all_generated_texts.extend(generated_texts)
+        # all_target_texts.extend(target_texts)
+
+        all_generated_texts = word_lst_recover
+
+    # FIXME Update this & put in report
+    # Calculate BLEU score for evaluation
+    smoothing_function = SmoothingFunction().method1
+    bleu_scores = [sentence_bleu([target.split()], gen.split(), smoothing_function=smoothing_function) 
+                for target, gen in zip(all_target_texts, all_generated_texts)]
+
+    avg_bleu_score = np.mean(bleu_scores)
+    avg_loss = np.mean(all_losses)
+
+    log.info(f"Average BLEU Score: {avg_bleu_score}")
+    log.info(f"Average Loss: {avg_loss}")
+
+    # Log a few examples
+    for i in range(min(5, len(all_target_texts))):
+        log.info(f"Target Text: {all_target_texts[i]}")
+        log.info(f"Generated Text: {all_generated_texts[i]}")
+
+    return avg_bleu_score, avg_loss
+
 # Main function
 def main():
     # Use GPU if available
@@ -142,162 +262,44 @@ def main():
         probabilities = torch.nn.functional.softmax(logits, dim=-1)
         return torch.multinomial(probabilities, num_samples=1)
 
-    def generate_text(model, tokenizer, input_ids, temperature=0.5):
-        model.eval()
-        with torch.no_grad():
-            # Get the embeddings for the input prompt
-            input_embeds = model.word_embedding(input_ids).to(device)
+    # def generate_text(model, tokenizer, input_ids, temperature=0.5):
+    #     model.eval()
+    #     with torch.no_grad():
+    #         # Get the embeddings for the input prompt
+    #         input_embeds = model.word_embedding(input_ids).to(device)
 
             
 
-            # Initialize noise
-            noise = torch.randn_like(input_embeds).to(device)
+    #         # Initialize noise
+    #         noise = torch.randn_like(input_embeds).to(device)
 
-            # Set up the diffusion process
-            diffusion = GaussianDiffusion(betas=betas)
+    #         # Set up the diffusion process
+    #         diffusion = GaussianDiffusion(betas=betas)
 
-            # Sample from the model using p_sample_loop
-            samples = diffusion.p_sample_loop(
-                model=model,
-                shape=input_embeds.shape,
-                noise=noise,
-                device=device,
-                progress=True,
-                clamp_step=None  # Set this to a specific value if needed
-            )
+    #         # Sample from the model using p_sample_loop
+    #         samples = diffusion.p_sample_loop(
+    #             model=model,
+    #             shape=input_embeds.shape,
+    #             noise=noise,
+    #             device=device,
+    #             progress=True,
+    #             clamp_step=None  # Set this to a specific value if needed
+    #         )
 
-            # Convert the generated embeddings back to tokens
-            generated_ids = model.lm_head(samples[-1].to(device))
+    #         # Convert the generated embeddings back to tokens
+    #         generated_ids = model.lm_head(samples[-1].to(device))
 
-            # Apply temperature sampling
-            generated_ids = generated_ids.view(-1, generated_ids.size(-1))  # Reshape to (batch_size * seq_len, vocab_size)
-            sampled_ids = temperature_sampling(generated_ids, temperature)
-            sampled_ids = sampled_ids.view(1, -1)  # Reshape back to (1, seq_len)
+    #         # Apply temperature sampling
+    #         generated_ids = generated_ids.view(-1, generated_ids.size(-1))  # Reshape to (batch_size * seq_len, vocab_size)
+    #         sampled_ids = temperature_sampling(generated_ids, temperature)
+    #         sampled_ids = sampled_ids.view(1, -1)  # Reshape back to (1, seq_len)
             
-            generated_text = tokenizer.decode_token(sampled_ids.squeeze().tolist(), skip_special_tokens=True)
+    #         generated_text = tokenizer.decode_token(sampled_ids.squeeze().tolist(), skip_special_tokens=True)
             
-            return generated_text
+    #         return generated_text
 
-    def evaluate_model(model, tokenizer, test_loader):
-        all_generated_texts = []
-        all_target_texts = []
-        all_losses = []
-
-        criterion = torch.nn.CrossEntropyLoss()
-
-        # FIXME update
-        for batch in test_loader:
-            log.debug("batch %s", batch)
-            input_ids_x =  batch[1]['input_ids'].to(device) #batch[1]
-            x_start = model.get_embeds(input_ids_x).to(device)
-            input_ids_mask = batch[1]['input_mask'].to(device)# batch[1]
-            input_ids_mask_ori = input_ids_mask
-            log.debug("input_ids_x: %s", input_ids_x)
-            log.debug("input_ids_mask: %s", input_ids_mask)
-
-            noise = torch.randn_like(x_start).to(device)
-            input_ids_mask = torch.broadcast_to(input_ids_mask.unsqueeze(dim=-1), x_start.shape).to(device)
-            x_noised = torch.where(input_ids_mask == 0, x_start, noise)
-
-            # target_texts = tokenizer.decode_token(target_ids)
-
-            sample_shape = (x_start.shape[0], config["seq_len"], config["embedding_dim"])
-
-            # Set up the diffusion process
-            diffusion = GaussianDiffusion(betas=betas)
-
-            sample_fn = diffusion.p_sample_loop
-            
-            samples = sample_fn(
-                model=model,
-                shape=sample_shape,
-                noise=x_noised,
-                device=device,
-                progress=True,
-                clamp_step=None,
-                # clamp_step=1700, #args.clamp_step,
-                # clamp_first=True, # clamp first mode
-                mask=input_ids_mask,
-                x_start=x_start,
-                # gap=step_gap = 1
-            )
-
-            sample = samples[-1]
-
-            log.debug('decoding for seq2seq', )
-            log.debug(sample.shape)
-
-            logits = model.get_logits(sample)  # bsz, seqlen, vocab
-            cands = torch.topk(logits, k=1, dim=-1)
-
-            word_lst_recover = []
-            word_lst_ref = []
-            word_lst_source = []
-
-            for seq, input_mask in zip(cands.indices, input_ids_mask_ori):
-                len_x = config["seq_len"] - sum(input_mask).tolist()
-                tokens = tokenizer.decode_token(seq[len_x:])
-                word_lst_recover.append(tokens)
-
-            for seq, input_mask in zip(input_ids_x, input_ids_mask_ori):
-                # tokens = tokenizer.decode_token(seq)
-                len_x = config["seq_len"]  - sum(input_mask).tolist()
-                word_lst_source.append(tokenizer.decode_token(seq[:len_x]))
-                word_lst_ref.append(tokenizer.decode_token(seq[len_x:]))
-
-
-            # TODO compute loss as well
-
-
-            # generated_texts = []
-            # for ids in input_ids:
-            #     generated_text = generate_text(model, tokenizer, ids.unsqueeze(0), temperature=0.5)
-            #     generated_texts.append(generated_text)
-
-            #     # Compute the loss
-            #     input_embeds = model.word_embedding(ids.unsqueeze(0)).to(device)
-            #     noise = torch.randn_like(input_embeds).to(device)
-                
-            #     samples = diffusion.p_sample_loop(
-            #         model=model,
-            #         shape=input_embeds.shape,
-            #         noise=noise,
-            #         device=device,
-            #         progress=True,
-            #         clamp_step=None
-            #     )
-            #     logits = model.lm_head(samples[-1].to(device))
-                
-            # Convert target ids to LongTensor
-            ids = ids.long()
-            loss = criterion(logits.view(-1, logits.size(-1)), ids.view(-1))
-            all_losses.append(loss.item())
-
-            # all_generated_texts.extend(generated_texts)
-            # all_target_texts.extend(target_texts)
-
-            all_generated_texts = word_lst_recover
-
-        # FIXME Update this & put in report
-        # Calculate BLEU score for evaluation
-        smoothing_function = SmoothingFunction().method1
-        bleu_scores = [sentence_bleu([target.split()], gen.split(), smoothing_function=smoothing_function) 
-                    for target, gen in zip(all_target_texts, all_generated_texts)]
-
-        avg_bleu_score = np.mean(bleu_scores)
-        avg_loss = np.mean(all_losses)
-
-        log.info(f"Average BLEU Score: {avg_bleu_score}")
-        log.info(f"Average Loss: {avg_loss}")
-
-        # Log a few examples
-        for i in range(min(5, len(all_target_texts))):
-            log.info(f"Target Text: {all_target_texts[i]}")
-            log.info(f"Generated Text: {all_generated_texts[i]}")
-
-        return avg_bleu_score, avg_loss
-
-
+    # TODO improve evaluation part
+    # TODO check how DiffuSeq does eval??
     # Perform evaluation
     avg_bleu_score, avg_loss = evaluate_model(model, tokenizer, test_loader)
 
