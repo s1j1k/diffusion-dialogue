@@ -83,8 +83,8 @@ class TransformerNetModel(nn.Module):
         # Reload saved model
         log.debug("Reloading saved temporary BertModel")
         temp_bert, config = load_temp_bert()
+        
         # Extract word embeddings
-        # FIXME Try to fix device errors
         device = th.device("cuda") if th.cuda.is_available() else th.device("cpu")
         self.word_embedding = temp_bert.embeddings.word_embeddings.to(device)
 
@@ -113,8 +113,9 @@ class TransformerNetModel(nn.Module):
             nn.Linear(time_embed_dim, config.hidden_size),
         )
         
-        # FIXME check this is working
         # Function to project to hidden size
+        # Note this is not used in the simplified implementation, 
+        # we just take the input as-is with same dimension as embedding dimension (768)
         if self.input_dims != config.hidden_size:
             self.input_up_proj = nn.Sequential(nn.Linear(input_dims, config.hidden_size),
                                               nn.Tanh(), nn.Linear(config.hidden_size, config.hidden_size))    
@@ -132,8 +133,9 @@ class TransformerNetModel(nn.Module):
         del temp_bert.pooler
 
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        # Note this is not used in the simplified implementation
-        # TODO add this back in again
+        
+        # Note this is not used in the simplified implementation, 
+        # we just take the output as-is with same dimension as embedding dimension (768)
         if self.output_dims != config.hidden_size:
             self.output_down_proj = nn.Sequential(nn.Linear(config.hidden_size, config.hidden_size),
                                                 nn.Tanh(), nn.Linear(config.hidden_size, self.output_dims))
