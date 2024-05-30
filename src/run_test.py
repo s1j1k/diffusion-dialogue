@@ -47,10 +47,25 @@ def main():
         device = torch.device("cpu")
         log.info("GPU not available, CPU used")
 
-    # Print training config to file
-    with open('./src/training_config.json', 'w') as fp:
-        json.dump(config, fp)
-        log.info("Training config saved to file.")
+    # Initialize the model
+    model = TransformerNetModel(
+        vocab_size=vocab_size, 
+        input_dims=config['embedding_dim'], 
+        hidden_t_dim=config['hidden_dim'], 
+        output_dims=config['output_dims']
+    )
+    model.to(device)
+
+    # Load the trained model weights
+    model.load_state_dict(torch.load('./checkpoints/trained_model.pth'))
+    model.eval()
+
+    # Load embeddings and use the weights from the model
+    model_emb = torch.nn.Embedding(
+        num_embeddings=tokenizer.vocab_size, 
+        embedding_dim=config['embedding_dim'], 
+        _weight=model.word_embedding.weight.clone().cpu()
+    ).eval().requires_grad_(False)
 
     # Initialize random embeddings
     torch.nn.init.normal_(model_emb.weight)
@@ -123,26 +138,6 @@ def main():
 
     # Create data loaders
     test_loader = DataLoader(test_dataset, batch_size=config['batch_size'], sampler=RandomSampler(test_dataset))
-
-    # Initialize the model
-    model = TransformerNetModel(
-        vocab_size=vocab_size, 
-        input_dims=config['embedding_dim'], 
-        hidden_t_dim=config['hidden_dim'], 
-        output_dims=config['output_dims']
-    )
-    model.to(device)
-
-    # Load the trained model weights
-    model.load_state_dict(torch.load('./checkpoints/trained_model.pth'))
-    model.eval()
-
-    # Load embeddings and use the weights from the model
-    model_emb = torch.nn.Embedding(
-        num_embeddings=tokenizer.vocab_size, 
-        embedding_dim=config['embedding_dim'], 
-        _weight=model.word_embedding.weight.clone().cpu()
-    ).eval().requires_grad_(False)
 
     def temperature_sampling(logits, temperature):
         logits = logits / temperature
