@@ -133,6 +133,7 @@ def evaluate_model(model, tokenizer, test_loader):
         # all_target_texts.extend(target_texts)
 
         all_generated_texts.extend(word_lst_recover)
+    log.debug("length generated texts = %s", len(all_generated_texts))
     log.debug("first elem generated texts = %s", all_generated_texts[0])
 
     # FIXME Update this & put in report
