@@ -94,10 +94,10 @@ class TransformerNetModel(nn.Module):
 
         # HIDDEN SIZE IN THE MODEL
         self.hidden_size = config.hidden_size
-        log.debug("input_dims={}", input_dims)
-        log.debug("hidden_t_dim={}", hidden_t_dim)
-        log.debug("output_dims={}", output_dims)
-        log.debug("hidden_size from BertConfig={}", self.hidden_size)
+        log.debug("input_dims=%d", input_dims)
+        log.debug("hidden_t_dim=%d", hidden_t_dim)
+        log.debug("output_dims=%d", output_dims)
+        log.debug("hidden_size from BertConfig=%d", self.hidden_size)
 
         # Generate logits for hidden representation
         self.lm_head = nn.Linear(self.input_dims, vocab_size)
