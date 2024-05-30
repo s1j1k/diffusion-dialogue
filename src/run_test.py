@@ -188,9 +188,9 @@ def main():
         # FIXME update
         for batch in test_loader:
             log.debug("batch %s", batch)
-            input_ids_x =  batch.pop('input_ids') #batch[1]
+            input_ids_x =  batch['input_ids'] #batch[1]
             x_start = model.get_embeds(input_ids_x)
-            input_ids_mask = batch.pop('input_mask')# batch[1]
+            input_ids_mask = batch['input_mask']# batch[1]
             input_ids_mask_ori = input_ids_mask
             log.debug("input_ids_x: %s", input_ids_x)
             log.debug("input_ids_mask: %s", input_ids_mask)
