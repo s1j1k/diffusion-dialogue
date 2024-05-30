@@ -209,8 +209,6 @@ class TextDataset(Dataset):
             input_ids = self.text_datasets[idx]['input_ids']
             # FIXME data issues with device
             device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-            # Assuming input_ids is already on GPU, you can check its device first
-            log.debug("Input ids device %s", input_ids.device)
             # Assuming self.model_emb is already on GPU, you can check its device first
             log.debug("model embedding weights device %s", self.model_emb.weight.device)
 
