@@ -83,6 +83,7 @@ def evaluate_model(model, tokenizer, test_loader):
         log.debug('decoding for seq2seq', )
         log.debug(sample.shape)
         
+        sample.to(device)
         logits = model.get_logits(sample)  # bsz, seqlen, vocab
         cands = torch.topk(logits, k=1, dim=-1)
 
