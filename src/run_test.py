@@ -125,31 +125,32 @@ def evaluate_model(model, tokenizer, test_loader):
         #     logits = model.lm_head(samples[-1].to(device))
             
         # Convert target ids to LongTensor
-        ids = ids.long()
-        loss = criterion(logits.view(-1, logits.size(-1)), ids.view(-1))
-        all_losses.append(loss.item())
+        # ids = ids.long()
+        # loss = criterion(logits.view(-1, logits.size(-1)), ids.view(-1))
+        # all_losses.append(loss.item())
 
         # all_generated_texts.extend(generated_texts)
         # all_target_texts.extend(target_texts)
 
-        all_generated_texts = word_lst_recover
+        all_generated_texts.extend(word_lst_recover)
+    log.debug("first elem generated texts = %s", all_generated_texts[0])
 
     # FIXME Update this & put in report
     # Calculate BLEU score for evaluation
-    smoothing_function = SmoothingFunction().method1
-    bleu_scores = [sentence_bleu([target.split()], gen.split(), smoothing_function=smoothing_function) 
-                for target, gen in zip(all_target_texts, all_generated_texts)]
+    # smoothing_function = SmoothingFunction().method1
+    # bleu_scores = [sentence_bleu([target.split()], gen.split(), smoothing_function=smoothing_function) 
+    #             for target, gen in zip(all_target_texts, all_generated_texts)]
 
-    avg_bleu_score = np.mean(bleu_scores)
-    avg_loss = np.mean(all_losses)
+    # avg_bleu_score = np.mean(bleu_scores)
+    # avg_loss = np.mean(all_losses)
 
-    log.info(f"Average BLEU Score: {avg_bleu_score}")
-    log.info(f"Average Loss: {avg_loss}")
+    # log.info(f"Average BLEU Score: {avg_bleu_score}")
+    # log.info(f"Average Loss: {avg_loss}")
 
-    # Log a few examples
-    for i in range(min(5, len(all_target_texts))):
-        log.info(f"Target Text: {all_target_texts[i]}")
-        log.info(f"Generated Text: {all_generated_texts[i]}")
+    # # Log a few examples
+    # for i in range(min(5, len(all_target_texts))):
+    #     log.info(f"Target Text: {all_target_texts[i]}")
+    #     log.info(f"Generated Text: {all_generated_texts[i]}")
 
     return avg_bleu_score, avg_loss
 
