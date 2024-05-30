@@ -189,8 +189,8 @@ def main():
 
     # Check input size
     log.debug("Training Set shape input_id_x: %s, input_id_y: %s, input_ids: %s, input_mask: %s",
-               lm_datasets['train']["input_id_x"].shape, lm_datasets['train']["input_id_y"].shape,
-               lm_datasets['train']["input_ids"].shape, lm_datasets['train']["input_mask"].shape)
+               np.shape(lm_datasets['train']["input_id_x"]), np.shape(lm_datasets['train']["input_id_y"]),
+               np.shape(lm_datasets['train']["input_ids"]), np.shape(lm_datasets['train']["input_mask"]))
 
     # Create datasets for training, validation, and test sets
     train_dataset = TextDataset(lm_datasets, 'train', model_emb=model_emb)
