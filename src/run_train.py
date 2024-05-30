@@ -45,11 +45,10 @@ Adapted from:
 
 '''
 
-# # Set training parameters, mainly using default values from DiffuSeq
+# Set training parameters, mainly using default values from DiffuSeq
 config = {
     # Note that the word embedding dimension is fixed at 768 by the choice of BERT pre traind model
     "embedding_dim": 768, # embedding dimension, as default by BERT base model
-    # TODO we expect input dim == embedding dim, is that true?
     "hidden_t_dim": 128, # hidden time embedding dimension
     "seq_len": 128, # maximum sequence length
     "output_dims": 128, # output dimension
@@ -58,10 +57,7 @@ config = {
     "lr": 0.001, # learning rate
     "ema_rate": 0.999, # exponential moving average rate
     "weight_decay": 0.01, # weight decay
-    # NOTE was 100
-    # NOTE learning steps should be as high as possible (40k for DiffuSeq)
-    # NOTE should be greater than num diffusion timesteps
-    "learning_steps": 4000, # total steps of learning # NOTE this was a very small number, check
+    "learning_steps": 4000, # total steps of learning
     "eval_interval": 1 # total steps of learning
 }
 

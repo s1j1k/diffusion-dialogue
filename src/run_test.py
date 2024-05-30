@@ -48,7 +48,7 @@ def main():
     model = TransformerNetModel(
         vocab_size=vocab_size, 
         input_dims=config['embedding_dim'], 
-        hidden_t_dim=config['hidden_dim'], 
+        hidden_t_dim=config['hidden_t_dim'], 
         output_dims=config['output_dims']
     )
     model.to(device)
