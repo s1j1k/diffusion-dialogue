@@ -12,4 +12,5 @@ datasets/CommonsenseConversation
 # Saved model state
 *.pth
 
-
+# Zipped model state
+src/*.zip

@@ -77,7 +77,7 @@ def main():
         log.info("GPU not available, CPU used")
 
     # Print training config to file
-    with open('training_config.json', 'w') as fp:
+    with open('./src/training_config.json', 'w') as fp:
         json.dump(config, fp)
         log.info("Training config saved to file.")
 
@@ -95,8 +95,8 @@ def main():
 
     # Dataset path definition
     data_dir = "./datasets/CommonsenseConversation"
-    train_path = f'{data_dir}/train_full.jsonl'
-    valid_path = f'{data_dir}/valid_full.jsonl'
+    train_path = f'{data_dir}/train.jsonl'
+    valid_path = f'{data_dir}/valid.jsonl'
 
     # Load datasets with size restriction
     train_limit = 1000  # Limit the size of the training set

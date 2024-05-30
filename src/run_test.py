@@ -25,7 +25,7 @@ vocab_size = tokenizer.vocab_size
 log.info("Vocab size", vocab_size)
 
 # Load the params from a file
-with open('training_config.json') as f:
+with open('./src/training_config.json') as f:
     config = json.load(f)
     log.debug("Training config from file:", config)
 
@@ -42,7 +42,7 @@ def main():
         log.info("GPU not available, CPU used")
 
     # Print training config to file
-    with open('training_config.json', 'w') as fp:
+    with open('./src/training_config.json', 'w') as fp:
         json.dump(config, fp)
         log.info("Training config saved to file.")
 
@@ -59,8 +59,8 @@ def main():
     log.info("Embedding layer", model_emb)
 
     # Dataset path definition
-    data_dir = "../datasets/CommonsenseConversation"
-    test_path = f'{data_dir}/test_full.jsonl'
+    data_dir = "./datasets/CommonsenseConversation"
+    test_path = f'{data_dir}/test.jsonl'
 
     # Load datasets with size restriction
     test_limit = 4    # Limit the size of the test set
@@ -142,7 +142,7 @@ def main():
     model.to(device)
 
     # Load the trained model weights
-    model.load_state_dict(torch.load('checkpoints/trained_model.pth'))
+    model.load_state_dict(torch.load('./src/checkpoints/trained_model.pth'))
     model.eval()
 
     # Load the tokenizer
