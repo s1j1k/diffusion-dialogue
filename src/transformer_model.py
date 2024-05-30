@@ -25,10 +25,14 @@ Adapted from diffuSeq (below citations)
 }
 """
 
-from transformers import BertConfig, BertModel
+from train_utils import CustomLogger
+# from transformers import BertConfig, BertModel
 import torch.nn as nn
 import torch as th
 import math
+from transformers import BertModel
+
+log = CustomLogger().get_logger()
 
 def timestep_embedding(timesteps, dim, max_period=10000):
     """
@@ -53,19 +57,45 @@ def timestep_embedding(timesteps, dim, max_period=10000):
     return embedding
 
 
+def load_model_embeddings():
+    """
+    Reload model embeddings and config same as training main file to have consistent embeddings function EMB(w)
+    """
+    log.debug("Reloading saved temporary BertModel")
+    temp_bert = BertModel.from_pretrained("checkpoints/temp_bert")
+    return temp_bert.embeddings.word_embeddings, temp_bert.config
+
 class TransformerNetModel(nn.Module):
+    """
+    The full Transformer model with attention and timestep embedding.
+
+    :param input_dims: dims of the input Tensor. # NOTE this should be the input tensor of the text
+    :param output_dims: dims of the output Tensor. # NOTE this is nominal (?)
+    :param hidden_t_dim: dims of time embedding.
+    :param dropout: the dropout probability.
+    :param config/config_name: the config of PLMs.
+    :param init_pretrained: bool, init whole network params with PLMs.
+    :param vocab_size: the size of vocabulary
+    """
     def __init__(self, vocab_size, input_dims, hidden_t_dim, output_dims):
         super().__init__()
+        log.info("Initializing transformer model")
 
-        config = BertConfig.from_pretrained('bert-base-uncased')
-        config.hidden_dropout_prob = 0
+        # Reload saved model
+        log.debug("Reloading saved temporary BertModel")
+        temp_bert, config = load_model_embeddings()
 
         self.input_dims = input_dims
         self.hidden_t_dim = hidden_t_dim
         self.output_dims = output_dims
-        self.hidden_size = config.hidden_size
 
-        self.word_embedding = nn.Embedding(vocab_size, self.input_dims)
+        # HIDDEN SIZE IN THE MODEL
+        self.hidden_size = config.hidden_size
+        log.debug("input_dims={}", input_dims)
+        log.debug("hidden_t_dim={}", hidden_t_dim)
+        log.debug("output_dims={}", output_dims)
+        log.debug("hidden_size from BertConfig={}", self.hidden_size)
+
         # Generate logits for hidden representation
         self.lm_head = nn.Linear(self.input_dims, vocab_size)
         with th.no_grad():
@@ -82,11 +112,21 @@ class TransformerNetModel(nn.Module):
         
         # Function to deal with having a hidden size not equal to input size, project to hidden size
         # Note this is not used in simplified implementation due to errors since the dimensions are already aligned
+        # TODO use this, hidden_size was being used incorrectly
+        # if self.input_dims != config.hidden_size:
+        #     self.input_up_proj = nn.Sequential(nn.Linear(config.hidden_size, input_dims),
+        #                                      nn.Tanh(), nn.Linear(input_dims, input_dims))    
+
+        # FIXME check how output dimension is working? what is it???
+        # FIXME is the input_dims actually the input dimension, run some tests to check the ACTUAL input_dims
         if self.input_dims != config.hidden_size:
-            self.input_up_proj = nn.Sequential(nn.Linear(config.hidden_size, input_dims),
-                                             nn.Tanh(), nn.Linear(input_dims, input_dims))        
+            self.input_up_proj = nn.Sequential(nn.Linear(input_dims, config.hidden_size),
+                                              nn.Tanh(), nn.Linear(config.hidden_size, config.hidden_size))    
         
-        temp_bert = BertModel.from_pretrained('bert-base-uncased', config=config)
+        # FIXME I think output dimension is being determined by this. 768 hidden layer
+        # TODO use the projection function for real this time
+        # TODO load from pretrained checkpoint on file 
+        # temp_bert = BertModel.from_pretrained('bert-base-uncased', config=config)
         self.word_embedding = temp_bert.embeddings.word_embeddings
        
         with th.no_grad():
@@ -103,9 +143,12 @@ class TransformerNetModel(nn.Module):
 
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
         # Note this is not used in the simplified implementation
+        # TODO add this back in again
         if self.output_dims != config.hidden_size:
             self.output_down_proj = nn.Sequential(nn.Linear(config.hidden_size, config.hidden_size),
-                                                nn.Tanh(), nn.Linear(config.hidden_size, self.output_dims))    
+                                                nn.Tanh(), nn.Linear(config.hidden_size, self.output_dims))
+
+          
     def get_embeds(self, input_ids):
         return self.word_embedding(input_ids)
 

@@ -1,6 +1,5 @@
 import numpy as np
 import torch
-from transformers import BertTokenizer
 from torch.utils.data import DataLoader, RandomSampler
 from datasets import Dataset as HFDataset
 from datasets import DatasetDict
@@ -65,14 +64,8 @@ def main():
     log.debug("num_embeddings %d, embedding_dim %d", vocab_size, config['embedding_dim'])
     log.debug("Shape of word embedding weight %s", model.word_embedding.weight.shape)
     log.debug("model.word_embedding.weight %s", model.word_embedding.weight)
-    model_emb = torch.nn.Embedding(
-        num_embeddings=vocab_size, 
-        embedding_dim=config['embedding_dim'] * 6, # FIXME why this is happening 
-        _weight=model.word_embedding.weight.clone().cpu()
-    ).eval().requires_grad_(False)
-
-    # Initialize random embeddings
-    torch.nn.init.normal_(model_emb.weight)
+    model_emb = model.word_embedding.eval().requires_grad_(False)
+    # FIXME embedding dimension = 768
     log.info("Embedding layer %s", model_emb)
 
     # Dataset path definition

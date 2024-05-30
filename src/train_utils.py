@@ -6,6 +6,7 @@ import copy
 from tqdm import tqdm
 import os
 import logging
+from transformers import BertModel
 
 """
 
@@ -34,7 +35,6 @@ Code is adapted from:
 }
 
 """
-
 
 class CustomLogger:
     """

@@ -1,5 +1,4 @@
 import torch 
-from transformers import BertTokenizer
 import json
 from torch.utils.data import DataLoader, RandomSampler #Dataset
 from datasets import Dataset as HFDataset
@@ -9,6 +8,7 @@ import logging as log
 # from torch.utils.data import Dataset
 import numpy as np
 import torch
+from transformers import BertModel
 
 # Custom classes
 from train_utils import TrainLoop, CustomLogger
@@ -50,8 +50,10 @@ log = CustomLogger().get_logger()
 
 # # Set training parameters, mainly using default values from DiffuSeq
 config = {
-    "embedding_dim": 128, # embedding dimension
-    "hidden_dim": 128, # hidden dimension
+    # Note that the word embedding dimension is fixed at 768 by the choice of BERT pre traind model
+    "embedding_dim": 768, # embedding dimension, as default by BERT base model
+    # TODO we expect input dim == embedding dim, is that true?
+    "hidden_t_dim": 128, # hidden time embedding dimension
     "seq_len": 128, # maximum sequence length
     "output_dims": 128, # output dimension
     "num_diffusion_timesteps": 2000, # number of diffusion timesteps
@@ -83,17 +85,21 @@ def main():
         json.dump(config, fp)
         log.info("Training config saved to file.")
 
-    # Get tokenizer from BERT
+    # Get tokenizer from BERT, will be reloaded later
     tokenizer = CustomBertTokenizer()
     vocab_size = tokenizer.vocab_size
     log.info("Vocab size %s", vocab_size)
 
-    # Initialize an embedding layer for the tokenizer's vocabulary with the chosen embedding dimension
-    model_emb = torch.nn.Embedding(tokenizer.vocab_size, config['embedding_dim'])
+    
+    # Create a BertModel from pretrained
+    # Has hidden dropout prob = 0.1 (default)
+    # Has hidden_size 768 (embedding dimension)
+    temp_bert = BertModel.from_pretrained('bert-base-uncased')
+    temp_bert.save_pretrained("checkpoints/temp_bert")
 
-    # Initialize random embeddings
-    torch.nn.init.normal_(model_emb.weight)
-    log.info("Embedding layer %s", model_emb)
+    # Create word embeddings layer
+    model_emb = temp_bert.embeddings.word_embeddings
+    log.debug("Embedding model {}", model_emb)
 
     # Dataset path definition - Note relative to the /diffusion-dialogue level
     data_dir = "./datasets/CommonsenseConversation"
@@ -114,12 +120,6 @@ def main():
     raw_datasets = HFDataset.from_dict(train_data)
     log.debug(raw_datasets)
     log.debug(raw_datasets[0])
-
-    # Tokenize dataset
-    # Initialize tokenizer
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-    vocab_size = tokenizer.vocab_size
-    print("Vocabulary Size:", vocab_size)
 
     # Use partial to pass the tokenizer to the tokenize_function
     tokenize_function_with_tokenizer = partial(tokenize_function, tokenizer=tokenizer)
@@ -187,6 +187,11 @@ def main():
     log.debug("Validation Set: %d", len(lm_datasets['validation']))
     log.debug('Padded Dataset: %s', lm_datasets)
 
+    # Check input size
+    log.debug("Training Set shape input_id_x: %s, input_id_y: %s, input_ids: %s, input_mask: %s",
+               lm_datasets['train']["input_id_x"].shape, lm_datasets['train']["input_id_y"].shape,
+               lm_datasets['train']["input_ids"].shape, lm_datasets['train']["input_mask"].shape)
+
     # Create datasets for training, validation, and test sets
     train_dataset = TextDataset(lm_datasets, 'train', model_emb=model_emb)
     valid_dataset = TextDataset(lm_datasets, 'validation', model_emb=model_emb)
@@ -214,7 +219,7 @@ def main():
 
     # Instantiate the diffusion model & transformer
     diffusion = GaussianDiffusion(betas=betas)
-    model = TransformerNetModel(vocab_size=vocab_size, input_dims=config['embedding_dim'], hidden_t_dim=config['hidden_dim'], output_dims=config['output_dims']).to(device)
+    model = TransformerNetModel(vocab_size=vocab_size, input_dims=config['embedding_dim'], hidden_t_dim=config['hidden_t_dim'], output_dims=config['output_dims']).to(device)
 
     # Log the total number of parameters
     pytorch_total_params = sum(p.numel() for p in model.parameters())
