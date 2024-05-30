@@ -186,6 +186,8 @@ def main():
         for batch in test_loader:
             input_ids = batch[1]
             target_ids = batch[1]
+            log.debug("input_ids: %s", input_ids)
+            log.debug("target_ids: %s", target_ids)
             target_texts = tokenizer.decode_token(target_ids)
 
             generated_texts = []
