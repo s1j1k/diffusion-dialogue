@@ -16,15 +16,6 @@ from transformer_model import TransformerNetModel
 from diffusion_model import GaussianDiffusion
 from data_utils import load_data, tokenize_function, merge_and_mask, pad_function, TextDataset, infinite_data_loader
 
-# TODO save a trained model for inference in future
-# TODO save hyper paramters in a script config file
-# TODO better logging 
-# TODO separate the inference stage (test script)
-
-# TODO make it more different to the below source
-# -> different data set, check result 
-
-# TODO run evaluation & generate plots as a separate file
 
 '''
 
