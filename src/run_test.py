@@ -46,14 +46,6 @@ def main():
         json.dump(config, fp)
         log.info("Training config saved to file.")
 
-    # Get tokenizer from BERT
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-    vocab_size = tokenizer.vocab_size
-    log.info("Vocab size %s", vocab_size)
-
-    # Initialize an embedding layer for the tokenizer's vocabulary with the chosen embedding dimension
-    model_emb = torch.nn.Embedding(tokenizer.vocab_size, config['embedding_dim'])
-
     # Initialize random embeddings
     torch.nn.init.normal_(model_emb.weight)
     log.info("Embedding layer %s", model_emb)
@@ -71,12 +63,6 @@ def main():
     raw_datasets = HFDataset.from_dict(test_data)
     log.debug(raw_datasets)
     log.debug(raw_datasets[0])
-
-    # Tokenize dataset
-    # Initialize tokenizer
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-    vocab_size = tokenizer.vocab_size
-    print("Vocabulary Size:", vocab_size)
 
     # Use partial to pass the tokenizer to the tokenize_function
     tokenize_function_with_tokenizer = partial(tokenize_function, tokenizer=tokenizer)
@@ -145,8 +131,12 @@ def main():
     model.load_state_dict(torch.load('./src/checkpoints/trained_model.pth'))
     model.eval()
 
-    # Load the tokenizer
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+    # Load embeddings and use the weights from the model
+    model_emb = torch.nn.Embedding(
+        num_embeddings=tokenizer.vocab_size, 
+        embedding_dim=config['embedding_dim'], 
+        _weight=model.word_embedding.weight.clone().cpu()
+    ).eval().requires_grad_(False)
 
     def temperature_sampling(logits, temperature):
         logits = logits / temperature
