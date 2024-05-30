@@ -64,7 +64,7 @@ def load_temp_bert():
     """
     log.debug("Reloading saved temporary BertModel")
     temp_bert = BertModel.from_pretrained("checkpoints/temp_bert")
-    return temp_bert.embeddings.word_embeddings, temp_bert.config
+    return temp_bert, temp_bert.config
 
 class TransformerNetModel(nn.Module):
     """
