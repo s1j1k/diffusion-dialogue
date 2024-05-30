@@ -62,7 +62,7 @@ def main():
     log.debug("num_embeddings %d, embedding_dim %d", vocab_size, config['embedding_dim'])
     log.debug("Shape of word embedding weight %s", model.word_embedding.weight.shape)
     log.debug("model.word_embedding.weight %s", model.word_embedding.weight)
-    model_emb = model.word_embedding.eval().requires_grad_(False)
+    model_emb = model.word_embedding.eval().requires_grad_(False).to(device)
     # FIXME embedding dimension = 768
     log.info("Embedding layer %s", model_emb)
 
