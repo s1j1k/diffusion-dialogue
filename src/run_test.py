@@ -42,13 +42,10 @@ def evaluate_model(model, tokenizer, test_loader):
 
     # FIXME update
     for batch in test_loader:
-        log.debug("batch %s", batch)
         input_ids_x =  batch[1]['input_ids'].to(device) #batch[1]
         x_start = model.get_embeds(input_ids_x.cpu()).to(device)
         input_ids_mask = batch[1]['input_mask'].to(device)# batch[1]
         input_ids_mask_ori = input_ids_mask
-        log.debug("input_ids_x: %s", input_ids_x)
-        log.debug("input_ids_mask: %s", input_ids_mask)
 
         noise = torch.randn_like(x_start).to(device)
         input_ids_mask = torch.broadcast_to(input_ids_mask.unsqueeze(dim=-1), x_start.shape).to(device)
@@ -83,8 +80,10 @@ def evaluate_model(model, tokenizer, test_loader):
         log.debug('decoding for seq2seq', )
         log.debug(sample.shape)
         
+        # try to fix Device error
         sample.to(device)
-        logits = model.get_logits(sample)  # bsz, seqlen, vocab
+        model.to(device)
+        logits = model.get_logits(sample.cpu())  # bsz, seqlen, vocab
         cands = torch.topk(logits, k=1, dim=-1)
 
         word_lst_recover = []
