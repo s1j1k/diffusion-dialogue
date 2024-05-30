@@ -27,6 +27,7 @@ import torch
 import json
 import numpy as np
 from torch.utils.data import Dataset
+from transformers import BertTokenizer
 
 def load_data(path, limit=None):
     """
@@ -48,6 +49,31 @@ def load_data(path, limit=None):
             sentence_lst['src'].append(content['src'].strip())
             sentence_lst['trg'].append(content['trg'].strip())
     return sentence_lst
+
+# TODO use custom tokenizer class
+class customBertTokenizer():
+    """
+    Load tokenizer from bert config 
+    """
+    def __init__(self, args):
+        tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+        self.tokenizer = tokenizer
+        self.sep_token_id = tokenizer.sep_token_id
+        self.pad_token_id = tokenizer.pad_token_id
+        # TODO reload from saved
+        # tokenizer.save_pretrained(args.checkpoint_path) 
+        self.vocab_size = len(self.tokenizer)
+    
+    def encode_token(self, sentences):
+        input_ids = self.tokenizer(sentences, add_special_tokens=True)['input_ids']
+        return input_ids
+        
+    def decode_token(self, seq):
+        seq = seq.squeeze(-1).tolist()
+        while len(seq)>0 and seq[-1] == self.pad_token_id:
+            seq.pop()
+        tokens = self.tokenizer.decode(seq)
+        return tokens
 
 def tokenize_function(examples, tokenizer):
     """
