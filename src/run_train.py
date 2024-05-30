@@ -94,7 +94,7 @@ def main():
     log.info("Embedding layer %s", model_emb)
 
     # Dataset path definition
-    data_dir = "./datasets/CommonsenseConversation"
+    data_dir = "../datasets/CommonsenseConversation"
     train_path = f'{data_dir}/train.jsonl'
     valid_path = f'{data_dir}/valid.jsonl'
 
