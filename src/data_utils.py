@@ -50,18 +50,16 @@ def load_data(path, limit=None):
             sentence_lst['trg'].append(content['trg'].strip())
     return sentence_lst
 
-# TODO use custom tokenizer class
-class customBertTokenizer():
+class CustomBertTokenizer():
     """
     Load tokenizer from bert config 
     """
-    def __init__(self, args):
+    def __init__(self):
         tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
         self.tokenizer = tokenizer
         self.sep_token_id = tokenizer.sep_token_id
         self.pad_token_id = tokenizer.pad_token_id
-        # TODO reload from saved
-        # tokenizer.save_pretrained(args.checkpoint_path) 
+        tokenizer.save_pretrained('./checkpoints/tokenizer') 
         self.vocab_size = len(self.tokenizer)
     
     def encode_token(self, sentences):

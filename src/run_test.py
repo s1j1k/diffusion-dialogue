@@ -19,8 +19,8 @@ log = CustomLogger().get_logger()
 # Ensure the device is set correctly
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Get tokenizer from BERT
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+# Get tokenizer from training
+tokenizer = BertTokenizer.from_pretrained('./checkpoints/tokenizer')
 vocab_size = tokenizer.vocab_size
 log.info("Vocab size %s", vocab_size)
 
@@ -163,7 +163,11 @@ def main():
             noise = torch.randn_like(input_embeds).to(device)
 
             # Set up the diffusion process
-            diffusion = GaussianDiffusion(betas=np.linspace(1e-4, 0.02, num_timesteps))
+            scale = 1000 / config['num_diffusion_timesteps']
+            beta_start = scale * 0.0001
+            beta_end = scale * 0.02
+            betas = np.linspace(beta_start, beta_end, config['num_diffusion_timesteps'], dtype=np.float64)
+            diffusion = GaussianDiffusion(betas=betas)
 
             # Sample from the model using p_sample_loop
             samples = diffusion.p_sample_loop(
@@ -207,7 +211,12 @@ def main():
                 # Compute the loss
                 input_embeds = model.word_embedding(ids.unsqueeze(0)).to(device)
                 noise = torch.randn_like(input_embeds).to(device)
-                diffusion = GaussianDiffusion(betas=np.linspace(1e-4, 0.02, config['num_diffusion_timesteps']))
+                # Set up the diffusion process
+                scale = 1000 / config['num_diffusion_timesteps']
+                beta_start = scale * 0.0001
+                beta_end = scale * 0.02
+                betas = np.linspace(beta_start, beta_end, config['num_diffusion_timesteps'], dtype=np.float64)
+                diffusion = GaussianDiffusion(betas=betas)
                 samples = diffusion.p_sample_loop(
                     model=model,
                     shape=input_embeds.shape,

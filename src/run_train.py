@@ -14,7 +14,7 @@ import torch
 from train_utils import TrainLoop, CustomLogger
 from transformer_model import TransformerNetModel
 from diffusion_model import GaussianDiffusion
-from data_utils import load_data, tokenize_function, merge_and_mask, pad_function, TextDataset, infinite_data_loader
+from data_utils import load_data, tokenize_function, merge_and_mask, pad_function, TextDataset, infinite_data_loader, CustomBertTokenizer
 
 
 '''
@@ -82,7 +82,7 @@ def main():
         log.info("Training config saved to file.")
 
     # Get tokenizer from BERT
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+    tokenizer = CustomBertTokenizer()
     vocab_size = tokenizer.vocab_size
     log.info("Vocab size %s", vocab_size)
 
