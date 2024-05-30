@@ -43,6 +43,8 @@ def evaluate_model(model, tokenizer, test_loader):
     criterion = torch.nn.CrossEntropyLoss()
 
     for batch in test_loader:
+        log.debug("batch=%s",batch)
+        log.debug("batch[1]=%s",batch[1])
         input_ids_x =  batch[1]['input_ids'].to(device) #batch[1]
         x_start = model.get_embeds(input_ids_x.cpu()).to(device)
         input_ids_mask = batch[1]['input_mask'].to(device)# batch[1]
