@@ -179,7 +179,7 @@ def main():
             sampled_ids = temperature_sampling(generated_ids, temperature)
             sampled_ids = sampled_ids.view(1, -1)  # Reshape back to (1, seq_len)
             
-            generated_text = tokenizer.decode(sampled_ids.squeeze().tolist(), skip_special_tokens=True)
+            generated_text = tokenizer.decode_token(sampled_ids.squeeze().tolist(), skip_special_tokens=True)
             
             return generated_text
 
@@ -193,7 +193,7 @@ def main():
         for batch in test_loader:
             input_ids = batch[1]['input_ids'].to(device)
             target_ids = batch[1]['input_ids'].to(device)
-            target_texts = [tokenizer.decode(ids, skip_special_tokens=True) for ids in target_ids]
+            target_texts = [tokenizer.decode_token(ids, skip_special_tokens=True) for ids in target_ids]
 
             generated_texts = []
             for ids in input_ids:
