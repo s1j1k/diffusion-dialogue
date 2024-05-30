@@ -3,7 +3,7 @@
 #SBATCH --partition=feit-gpu-a100
 #SBATCH --qos=feit
 #SBATCH --gres=gpu:1
-#SBATCH --job-name=diffusion-dialogue-test
+#SBATCH --job-name=test-dd
 #SBATCH --time=0:50:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
