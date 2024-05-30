@@ -234,7 +234,7 @@ class TrainLoop():
         # Save the model after training is completed
         if not os.path.exists('checkpoints'):
             os.makedirs('checkpoints')
-        th.save(self.model.state_dict(), './src/checkpoints/trained_model.pth')
+        th.save(self.model.state_dict(), './checkpoints/trained_model.pth')
         log.info("Model saved successfully.")
         
         # Plotting the training and validation losses

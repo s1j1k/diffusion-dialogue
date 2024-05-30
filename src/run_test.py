@@ -57,7 +57,7 @@ def main():
     log.info("Embedding layer %s", model_emb)
 
     # Dataset path definition
-    data_dir = "../datasets/CommonsenseConversation"
+    data_dir = "./datasets/CommonsenseConversation"
     test_path = f'{data_dir}/test.jsonl'
 
     # Load datasets with size restriction
@@ -134,7 +134,7 @@ def main():
     model.to(device)
 
     # Load the trained model weights
-    model.load_state_dict(torch.load('./src/checkpoints/trained_model.pth'))
+    model.load_state_dict(torch.load('./checkpoints/trained_model.pth'))
     model.eval()
 
     # Load embeddings and use the weights from the model

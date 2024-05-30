@@ -28,6 +28,7 @@ import json
 import numpy as np
 from torch.utils.data import Dataset
 from transformers import BertTokenizer
+import os
 
 def load_data(path, limit=None):
     """
@@ -59,6 +60,8 @@ class CustomBertTokenizer():
         self.tokenizer = tokenizer
         self.sep_token_id = tokenizer.sep_token_id
         self.pad_token_id = tokenizer.pad_token_id
+        if not os.path.exists('checkpoints'):
+            os.makedirs('checkpoints')
         tokenizer.save_pretrained('./checkpoints/tokenizer') 
         self.vocab_size = len(self.tokenizer)
     

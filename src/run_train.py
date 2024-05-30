@@ -95,7 +95,7 @@ def main():
     torch.nn.init.normal_(model_emb.weight)
     log.info("Embedding layer %s", model_emb)
 
-    # Dataset path definition
+    # Dataset path definition - Note relative to the /diffusion-dialogue level
     data_dir = "./datasets/CommonsenseConversation"
     train_path = f'{data_dir}/train.jsonl'
     valid_path = f'{data_dir}/valid.jsonl'
