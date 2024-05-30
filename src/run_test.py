@@ -59,7 +59,7 @@ def main():
     log.info("Embedding layer", model_emb)
 
     # Dataset path definition
-    data_dir = "./datasets/CommonsenseConversation"
+    data_dir = "../datasets/CommonsenseConversation"
     test_path = f'{data_dir}/test_full.jsonl'
 
     # Load datasets with size restriction
@@ -131,7 +131,6 @@ def main():
 
     # Create data loaders
     test_loader = DataLoader(test_dataset, batch_size=config['batch_size'], sampler=RandomSampler(test_dataset))
-    test_data_iter = iter(test_loader)
 
     # Initialize the model
     model = TransformerNetModel(
