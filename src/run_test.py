@@ -57,6 +57,9 @@ def main():
     model.load_state_dict(torch.load('./checkpoints/trained_model.pth'))
     model.eval()
 
+    # Try to fix error
+    model.to(device)
+
     # Load embeddings and use the weights from the model
     log.debug("Want the shape of weight to == [num_embeddings, embedding_dim]")
     log.debug("num_embeddings %d, embedding_dim %d", vocab_size, config['embedding_dim'])

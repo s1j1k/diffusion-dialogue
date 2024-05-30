@@ -211,11 +211,6 @@ class TextDataset(Dataset):
             device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
             # Assuming input_ids is already on GPU, you can check its device first
             log.debug("Input ids device %s", input_ids.device)
-
-            # Ensure that input_ids is on GPU
-            if input_ids.device != device:
-                input_ids = input_ids.to(device)
-
             # Assuming self.model_emb is already on GPU, you can check its device first
             log.debug("model embedding weights device %s", self.model_emb.weight.device)
 
