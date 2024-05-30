@@ -103,10 +103,6 @@ def main():
     log.debug("Test Set:", len(tokenized_datasets['test']))
 
     # Apply merge and mask to the tokenized datasets
-    tokenized_datasets = DatasetDict({
-        'test': tokenized_test_dataset
-    })
-
     # Use partial to pass the tokenizer to merge_and_mask
     merge_and_mask_with_tokenizer = partial(merge_and_mask, tokenizer=tokenizer, config=config)
     pad_function_with_tokenizer = partial(pad_function, tokenizer=tokenizer, config=config)
