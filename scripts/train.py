@@ -40,6 +40,8 @@ def parse_args():
     p.add_argument("--train-limit", type=int)
     p.add_argument("--valid-limit", type=int, default=2000)
     p.add_argument("--eval-every", type=int, default=500)
+    p.add_argument("--save-every", type=int, default=5000, help="also save checkpoint.pt every N steps")
+    p.add_argument("--amp", action="store_true", help="fp16 mixed precision (CUDA only)")
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     for f in Config.__dataclass_fields__.values():
         p.add_argument("--" + f.name.replace("_", "-"), type=type(f.default), default=None)
@@ -73,6 +75,11 @@ def evaluate(model, diffusion, loader, device, max_batches=20):
     return {k: v / n for k, v in totals.items()}
 
 
+def save(path, cfg, model, ema, step):
+    torch.save({"config": cfg.to_dict(), "model": model.state_dict(), "ema": ema.state_dict(),
+                "tokenizer": cfg.tokenizer, "step": step}, path)
+
+
 def main():
     args = parse_args()
     cfg = Config(**PRESETS[args.preset])
@@ -83,6 +90,7 @@ def main():
     torch.manual_seed(cfg.seed)
     os.makedirs(args.out, exist_ok=True)
     device = torch.device(args.device)
+    amp = args.amp and device.type == "cuda"
 
     tok = AutoTokenizer.from_pretrained(cfg.tokenizer)
     train = DialogueDataset(load_pairs(os.path.join(args.data, "train.jsonl"), args.train_limit), tok, cfg.seq_len)
@@ -98,8 +106,12 @@ def main():
     n_params = sum(p.numel() for p in model.parameters())
     print(f"{n_params / 1e6:.1f}M parameters, {len(train)} training pairs, device {device}")
     with open(os.path.join(args.out, "config.json"), "w") as f:
-        json.dump({**cfg.to_dict(), "train_pairs": len(train), "params": n_params}, f, indent=2)
+        json.dump({**cfg.to_dict(), "train_pairs": len(train), "params": n_params,
+                   "amp": amp, "device": str(device),
+                   "gpu": torch.cuda.get_device_name(0) if device.type == "cuda" else None}, f, indent=2)
 
+    scaler = torch.amp.GradScaler("cuda", enabled=amp)
+    ckpt_path = os.path.join(args.out, "checkpoint.pt")
     log = open(os.path.join(args.out, "log.jsonl"), "a")
     data = batches(train_loader)
     start = time.time()
@@ -107,11 +119,14 @@ def main():
         b = next(data)
         for g in opt.param_groups:
             g["lr"] = lr_at(step, cfg)
-        out = diffusion.loss(model, b["ids"].to(device), b["mask"].to(device), cfg.nll_fraction)
+        with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=amp):
+            out = diffusion.loss(model, b["ids"].to(device), b["mask"].to(device), cfg.nll_fraction)
         opt.zero_grad(set_to_none=True)
-        out["loss"].backward()
+        scaler.scale(out["loss"]).backward()
+        scaler.unscale_(opt)
         grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), cfg.grad_clip)
-        opt.step()
+        scaler.step(opt)
+        scaler.update()
         with torch.no_grad():
             for pe, pm in zip(ema.parameters(), model.parameters()):
                 pe.lerp_(pm, 1.0 - cfg.ema_decay)
@@ -126,10 +141,11 @@ def main():
             print(" ".join(f"{k}={v:.4g}" if isinstance(v, float) else f"{k}={v}" for k, v in rec.items()))
             if not math.isfinite(rec["loss"]):
                 raise SystemExit("loss is not finite")
+        if args.save_every and step and step % args.save_every == 0:
+            save(ckpt_path, cfg, model, ema, step)
 
-    torch.save({"config": cfg.to_dict(), "model": model.state_dict(), "ema": ema.state_dict(),
-                "tokenizer": cfg.tokenizer}, os.path.join(args.out, "checkpoint.pt"))
-    print("saved", os.path.join(args.out, "checkpoint.pt"))
+    save(ckpt_path, cfg, model, ema, cfg.train_steps)
+    print("saved", ckpt_path)
 
 
 if __name__ == "__main__":
