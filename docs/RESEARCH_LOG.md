@@ -62,7 +62,49 @@ towards zero, which would trivially shrink the MSE.
 7.5M parameters), first 100k training pairs, 2,000 steps (≈64k samples
 seen), batch 32, lr 3e-4, warm-up 200, rounding NLL on 25 % of positions,
 T = 2,000, sqrt schedule. A sanity check that the fixed pipeline learns, not
-a tuned result. Results: *pending*.
+a tuned result. Recorded as model version **v0.1** (`models/registry.json`)
+and trial `docs/experiments/cpu-small.md`.
+
+Training loss 1.075 → 0.265, validation 1.079 → 0.328 (still falling).
+
+## 2026-11-19: evaluating v0.1, the "traveler" effect, benchmarking
+
+**Denoising probe.** Share of response words recovered in one step from
+noise level t, on unseen test prompts: 0.85 (t = 0), 0.74 (200), 0.55
+(1000), 0.40 (1500), 0.01 (1999). Training prompts score the same, so the
+network has learned to denoise and generalises; it fails only from pure
+noise, where it predicts a near-average embedding.
+
+**Generation, 200 test prompts, 50 steps:**
+
+| Sampling | Sentence BLEU | Corpus BLEU | Distinct-2 | Output |
+| --- | --- | --- | --- | --- |
+| Clamp every step | 0.0029 | 0.0003 | 0.26 | "traveler enclosure walker traveler…" |
+| Clamp t ≤ 1000 | 0.0059 | 0.0002 | 0.59 | mixed |
+| Clamp t ≤ 500 | 0.0062 | 0.0001 | 0.67 | mixed |
+| No clamp | **0.0082** | 0.0002 | 0.61 | common words in no order ("did be like will they…") |
+
+**Why "traveler".** The repeated nonsense words are the tokens whose random
+initial embeddings lie closest to the origin (`traveler` has the shortest
+vector: norm 8.5 vs a mean of 11.2). Rare words never occur in 64k training
+replies, so their embeddings stay at their random starting points. Under
+uncertainty the MSE-optimal prediction is the mean of plausible embeddings,
+near the origin; rounding it picks whichever rare word drew the shortest
+vector, and clamping at every step locks that in from the first step. With
+another seed a different word would win. Remedies to try: clamp only late
+(done, helps), equal-norm embeddings, cosine rounding, more training.
+
+**Inference server.** `scripts/serve.py` loads a checkpoint once and serves
+`POST /generate`. Example: "I let the waffles get mouldy last night. Did you
+eat one?" → "right couple willving do theyaus like the be it was morning are
+they a" (50 steps, ~0.5 s per response on CPU).
+
+**Version control and benchmarking.** Model versions are registered in
+`models/registry.json` (code commit, config, data, checksum, rebuild
+command), checkpoints are attached to GitHub Releases, and every version
+answers the fixed prompt set in `benchmarks/` with fixed seeds (re-running
+v0.1 reproduced its outputs exactly). v0 (2024) is recorded from the report.
+How to extend this to current diffusion products: `docs/BENCHMARKING.md`.
 
 ## Training budget compared with DiffuSeq
 

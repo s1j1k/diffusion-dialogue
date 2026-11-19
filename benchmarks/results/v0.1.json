@@ -1,0 +1,481 @@
+{
+ "version": "v0.1",
+ "benchmarked_at": "2026-11-19T12:51:24",
+ "checkpoint": {
+  "path": "runs/cpu-small/checkpoint.pt",
+  "sha256": "a1185eab69a70eebaf3f69af603dd477a1881166c543fc877f95dcf09538e77f",
+  "bytes": 59866577
+ },
+ "config": {
+  "tokenizer": "bert-base-uncased",
+  "seq_len": 64,
+  "emb_dim": 128,
+  "d_model": 256,
+  "n_layers": 4,
+  "n_heads": 4,
+  "dropout": 0.1,
+  "time_dim": 128,
+  "num_steps": 2000,
+  "schedule": "sqrt",
+  "nll_fraction": 0.25,
+  "lr": 0.0003,
+  "weight_decay": 0.0,
+  "batch_size": 32,
+  "train_steps": 2000,
+  "warmup_steps": 200,
+  "grad_clip": 1.0,
+  "ema_decay": 0.999,
+  "seed": 0
+ },
+ "params": 7477632,
+ "weights": "ema",
+ "benchmark_code": {
+  "commit": "b083e7e",
+  "dirty": false
+ },
+ "environment": {
+  "python": "3.12.10",
+  "torch": "2.15.0+cpu",
+  "device": "cpu",
+  "platform": "Windows-11-10.0.26200-SP0"
+ },
+ "settings": [
+  {
+   "label": "50 steps, no clamp",
+   "steps": 50,
+   "clamp": false
+  },
+  {
+   "label": "50 steps, clamp t<=500",
+   "steps": 50,
+   "clamp": true,
+   "clamp_max_t": 500
+  },
+  {
+   "label": "200 steps, no clamp",
+   "steps": 200,
+   "clamp": false
+  }
+ ],
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "outputs": [
+  {
+   "id": "report2024-1",
+   "setting": "50 steps, no clamp",
+   "responses": [
+    "maris beeding will be traveler travelerlityaus enclosure your have right be.",
+    "human but being, for 501 akira revolves be like likeving traveler!. it..",
+    "but with not are being traveler s requirements for to to know so so a rather traveler that. and walker rightoo."
+   ],
+   "seconds_per_response": 0.634
+  },
+  {
+   "id": "report2024-2",
+   "setting": "50 steps, no clamp",
+   "responses": [
+    "be these will ¾ traveler rightlity dick enclosure reward revolves have right be. rather",
+    "but being, for 501 sorcerer will right like likeving traveler! rather it..",
+    "with not are being traveler s requirements for to to know will so a rather traveler that. and walker rewardoo [unused970] to"
+   ],
+   "seconds_per_response": 0.648
+  },
+  {
+   "id": "test-3",
+   "setting": "50 steps, no clamp",
+   "responses": [
+    "be are '! know is [unused970] will plays like is! maris beeding will ¾ traveler rightlity dick 501",
+    "traveler but traveler couple the have phone is so be and just being but being, for 501 sorcerer will be traveler likeving traveler! right it..",
+    "with human with but have if and moved the is are these but with not are being traveler s requirements for to to know human so a rather traveler that. and walker rightoo."
+   ],
+   "seconds_per_response": 0.607
+  },
+  {
+   "id": "test-4",
+   "setting": "50 steps, no clamp",
+   "responses": [
+    "so was like have true. a 501 like [unused970] be i, be be are ' of know is are like plays like is! maris beeding will be traveler 501lityaus 501",
+    "just be ' but like a they is like of be revolves areld traveler but like couple the have phone is so be and just human but being, for 501 akira will be like likeving traveler!. it..",
+    "like but [unused970] will did if to? meetings have be? isving with human with but have if and moved the. are these but with not are being traveler human requirements for to to know so so a rather 501 that. and walker."
+   ],
+   "seconds_per_response": 0.586
+  },
+  {
+   "id": "test-6",
+   "setting": "50 steps, no clamp",
+   "responses": [
+    "traveler boats i maris so was like have true. a 501 like [unused970] be i, be be re '! know is [unused970] like plays like is! maris beeding will be traveler right expectaus 501",
+    "sophomore where s be enclosure be ' but like but is is like 501 be revolves areld traveler but traveler couple the have phone is so be and just being but being, for 501 they will right like likeving traveler!. it..",
+    "traveler and bai with. but [unused970] will did if to? meetings have be? isving with human with but have if and moved the. are these but with not are being traveler human requirements for to to island like so a rather 501 that. and."
+   ],
+   "seconds_per_response": 0.588
+  },
+  {
+   "id": "test-8",
+   "setting": "50 steps, no clamp",
+   "responses": [
+    "sophomore traveler boats i like so was like have true. a 501 like [unused970] be i, be be re '! know is are like plays like is! are beeding will be traveler 501 expectaus 501",
+    "sophomore sophomore where s be enclosure be ' but like a is is like of be revolves areld traveler but traveler couple the have phone is so be and just being but being, for 501 they will right like likeving traveler!. it..",
+    "sophomore traveler and bai with like but [unused970] will did if to? meetings have be? isving with human with but have if and moved the. are these but with not are being traveler human requirements for to to know with so a rather 501 that. and walker rewardoo."
+   ],
+   "seconds_per_response": 0.583
+  },
+  {
+   "id": "test-10",
+   "setting": "50 steps, no clamp",
+   "responses": [
+    "true. a 501 like [unused970] be i, be be are '! know is are like plays be is! are beeding will be traveler being toaus 501",
+    "right but they is like of be revolves areld traveler but traveler couple the have phone is so be and just being but being, for 501 akira will be like likeving traveler!. it..",
+    "did if to? meetings have be? isving with human with but have if and moved the is are these but with not are being traveler s requirements for to to know are so a rather traveler that. and walker seemedoo."
+   ],
+   "seconds_per_response": 0.587
+  },
+  {
+   "id": "test-11",
+   "setting": "50 steps, no clamp",
+   "responses": [
+    "traveler boats i maris so was like have true. a 501 like [unused970] be i, be be re '! know is are like plays be is! are beeding will be traveler right expectaus 501",
+    "sophomore where s be enclosure be ' but like but is is like of be revolves areld traveler but traveler couple the have phone is so be and just being but being, for 501 akira.. like likeving traveler!. it..",
+    "traveler and bai with. but [unused970] will did if to? meetings have be? isving with human with but have if and moved the. are these but have not are being traveler s requirements for to toving like so a rather 501 that. and."
+   ],
+   "seconds_per_response": 0.599
+  },
+  {
+   "id": "waffles",
+   "setting": "50 steps, no clamp",
+   "responses": [
+    "like [unused970] be i, be be re '! know is are like plays like is! maris beeding will be traveler right toaus 501",
+    "like of be revolves areld traveler but traveler couple the have phone is so be and just being but being, for 501 sorcerer will right like likeving traveler!. it..",
+    "meetings have true? isving with human with but just if and moved the. are these but with not are being traveler human requirements for to to know with so a rather 501 that. and walker!oo."
+   ],
+   "seconds_per_response": 0.583
+  },
+  {
+   "id": "weekend",
+   "setting": "50 steps, no clamp",
+   "responses": [
+    "boats i like so was like have true right a 501 like [unused970] be i, be be are '! know is are like plays be is! are beeding will be traveler 501 expectaus 501",
+    "where s be enclosure be ' but like a is is like of be revolves areld traveler but like couple the have phone is so be and just being but being, for 501 they will be like likeving traveler!. it..",
+    "and bai with like but [unused970] will did if to? meetings have be? isving with human with but have if and moved the be are these but with not are being traveler s requirements for to to know so so a rather 501 that. and walker."
+   ],
+   "seconds_per_response": 0.586
+  },
+  {
+   "id": "movie",
+   "setting": "50 steps, no clamp",
+   "responses": [
+    "true right a 501 like will be i, be be are '! know is are like will like is! maris beeding will be traveler 501 will dat 501",
+    "like but is is like of be enclosure areld traveler but traveler couple the princess phone is so be and just being but being, for 501 akira will right like likeving traveler!. it..",
+    "did if to? meetings have be? isving with human with but have if and moved the. are these but with not are being traveler human requirements for to to know will so a rather 501 that. and walker seemed"
+   ],
+   "seconds_per_response": 0.586
+  },
+  {
+   "id": "rain",
+   "setting": "50 steps, no clamp",
+   "responses": [
+    "have true. a 501 like [unused970] be i, be be are ' of know is are like plays be is! maris beeding will be traveler 501 expectaus 501",
+    "but like a is is like of be revolves areld traveler but traveler couple the sophomore phone is so be and just being but being, for 501 they will be like likeving traveler!. it..",
+    "will did if to? meetings have be? isving with human with but just if and moved the be are these but with not are being traveler s requirements for to to know so so a rather these that. and walker rewardoo."
+   ],
+   "seconds_per_response": 0.592
+  },
+  {
+   "id": "report2024-1",
+   "setting": "50 steps, clamp t<=500",
+   "responses": [
+    "sophomore travelereding will enclosure traveler rightlity datoo revolves have walker [unused970]. rather",
+    "human being being, for 501 they revolves right traveler didving traveler! rather it..",
+    "sophomore with not are being traveler human requirements did to to traveler will being a [unused970] traveler that. and traveler rewardoo."
+   ],
+   "seconds_per_response": 0.852
+  },
+  {
+   "id": "report2024-2",
+   "setting": "50 steps, clamp t<=500",
+   "responses": [
+    "theyeding will enclosure traveler rightlity dickoo walker revolves have enclosureving. rather.",
+    "being being, for sophomore they revolves right traveler didving traveler! rather it..",
+    "with not are being traveler human requirements did to to insufficient will being a [unused970] sorcerer that. and rather rewardoo. walker"
+   ],
+   "seconds_per_response": 0.846
+  },
+  {
+   "id": "test-3",
+   "setting": "50 steps, clamp t<=500",
+   "responses": [
+    "be they ' being know is are will anthropology maris is! sophomore travelereding will enclosure traveler rightlity dickoo",
+    "traveler but traveler couple the sophomore traveler human traveler couple and enclosure human being being, for 501 sorcerer revolves right traveler didving traveler! rather it..",
+    "with human! but being if walker moved the. are 501 sophomore have not are being traveler human requirements while to to traveler walker being a [unused970] traveler that. and traveler rewardoo."
+   ],
+   "seconds_per_response": 0.834
+  },
+  {
+   "id": "test-4",
+   "setting": "50 steps, clamp t<=500",
+   "responses": [
+    "so traveler human expect true. a 501 like [unused970] be i walker maui be they ' being know is are will anthropology maris sophomore! sophomore theseeding will right traveler rightlity datoo",
+    "enclosure rather ' traveler right a they being like [unused970] maris enclosure areld traveler but traveler couple the sophomore traveler human traveler couple and enclosure human being being, for 501 they revolves right traveler didving traveler! rather it..",
+    "taylor traveler [unused970] will did if to? meetings have true? is human with human with but being if walker true the. are walker sophomore with not are being traveler human requirements while to to traveler walker being a [unused970] sorcerer that. and traveler reward"
+   ],
+   "seconds_per_response": 0.85
+  },
+  {
+   "id": "test-6",
+   "setting": "50 steps, clamp t<=500",
+   "responses": [
+    "traveler reward i maris being traveler human expect enclosure. a 501 dat [unused970] be i walker maui be they ' being know is are will anthropology maris is! sophomore theseeding will right traveler right to datoo",
+    "sophomore traveler umm be enclosure rather ' traveler right a they being like [unused970] maris revolves areld traveler but traveler couple the sophomore traveler human traveler couple and enclosure human being being, for 501 they revolves right traveler did like traveler!. it..",
+    "sophomore execute bai sophomore taylor traveler [unused970] will did sophomore to? meetings have true? is human with human rather traveler being if walker true the. are. sophomore have not. being traveler human requirements while to to traveler walker being a [unused970] 501 that. and"
+   ],
+   "seconds_per_response": 0.842
+  },
+  {
+   "id": "test-8",
+   "setting": "50 steps, clamp t<=500",
+   "responses": [
+    "##ving traveler reward i are being traveler human expect enclosure. a 501 dat [unused970] be i walker maui be they ' being know is are will anthropology maris is! sophomore theseeding will right traveler rightlity datoo",
+    "know sophomore traveler umm be enclosure rather ' traveler right a they being like [unused970] maris revolves areld traveler but traveler couple the sophomore traveler human traveler couple and enclosure being being being, for 501 they revolves right traveler did like traveler!. it..",
+    "sophomore sophomore execute bai sophomore. traveler [unused970] will did if to? meetings have true? is human with human with but being if walker true the. are 501 sophomore have not are being traveler human requirements for to to traveler will being a [unused970] traveler that. and traveler rewardoo."
+   ],
+   "seconds_per_response": 0.831
+  },
+  {
+   "id": "test-10",
+   "setting": "50 steps, clamp t<=500",
+   "responses": [
+    "true. a 501 dat [unused970] be i walker maui be they ' being know is are will anthropology maris is! sophomore theseeding will right traveler right to datoo",
+    "right a they is traveler! maris enclosure areld traveler but traveler couple the sophomore traveler human traveler couple and enclosure human being being, for 501 they revolves right traveler didving traveler! rather it..",
+    "re if to? meetings have true? is human with human with but being if walker moved the. are walker sophomore with not are being traveler human requirements while to to traveler will being a [unused970] sorcerer that. and traveler rewardoo."
+   ],
+   "seconds_per_response": 0.83
+  },
+  {
+   "id": "test-11",
+   "setting": "50 steps, clamp t<=500",
+   "responses": [
+    "traveler reward i maris being traveler human expect true. a 501 dat [unused970] be i walker maui be they ' being know is are will anthropology maris is! sophomore theseeding will right traveler right to datoo",
+    "sophomore traveler umm be enclosure rather ' traveler right a they being like [unused970] maris revolves areld traveler but traveler couple the sophomore traveler human will couple and enclosure human being being, for 501 they revolves. traveler did like traveler!. it..",
+    "sophomore execute bai sophomore taylor traveler [unused970] will did if to? meetings have true? is human with human with traveler being if walker moved the. are. sophomore have not. being traveler human requirements while to toving walker being a [unused970] 501 that. and walker."
+   ],
+   "seconds_per_response": 1.01
+  },
+  {
+   "id": "waffles",
+   "setting": "50 steps, clamp t<=500",
+   "responses": [
+    "dat [unused970] be i walker maui be they ' being know is are will anthropology maris is! sophomore theseeding will right traveler right to datoo",
+    "like! maris enclosure areld traveler but traveler couple the sophomore traveler human will couple and enclosure human being being, for 501 they revolves right traveler didving traveler! rather it..",
+    "meetings have true? is human with human with but being if walker moved the. are 501 sophomore with not are being traveler human requirements while to to traveler will being a [unused970] sorcerer that. and traveler rewardoo."
+   ],
+   "seconds_per_response": 0.957
+  },
+  {
+   "id": "weekend",
+   "setting": "50 steps, clamp t<=500",
+   "responses": [
+    "reward i are being traveler human expect enclosure. a 501 dat [unused970] be i walker maui be they ' being know is are will anthropology maris is! sophomore theseeding will right traveler rightlity datoo",
+    "traveler umm be enclosure rather ' traveler right a they being like [unused970] maris enclosure areld traveler but traveler couple the sophomore traveler human will couple and enclosure being being being, for 501 they revolves right traveler didving traveler! rather it..",
+    "execute bai sophomore taylor traveler [unused970] will did if to? meetings have true? is human with human with they being if walker true the. are walker sophomore with not are being traveler human requirements for to to traveler will being a [unused970] sorcerer that. and traveler reward"
+   ],
+   "seconds_per_response": 0.893
+  },
+  {
+   "id": "movie",
+   "setting": "50 steps, clamp t<=500",
+   "responses": [
+    "true. a 501 dat [unused970] be i walker maui be they ' being know is are will anthropology maris is! sophomore theseeding will right traveler rightlity datoo",
+    "right a they being like [unused970] maris enclosure areld traveler but traveler couple the sophomore traveler human will couple and enclosure human being being, for 501 they revolves right traveler did like traveler! rather it..",
+    "did if to? meetings have true? is human with human with but being if walker moved the. are walker sophomore with not are being traveler human requirements while to to traveler will being a [unused970] sorcerer that. and traveler reward"
+   ],
+   "seconds_per_response": 0.837
+  },
+  {
+   "id": "rain",
+   "setting": "50 steps, clamp t<=500",
+   "responses": [
+    "expect true. a 501 like [unused970] be i walker maui be they ' being know is are will anthropology maris is! sophomore theseeding will right traveler right to datoo",
+    "traveler right a they is like [unused970] maris enclosure areld traveler but traveler couple the sophomore traveler human traveler couple and enclosure human being being, for 501 they revolves right traveler did like traveler! rather it..",
+    "will did if to? meetings have true? is human with human with but being if walker moved the. are walker sophomore with not are being traveler human requirements while to to traveler will being a [unused970] sorcerer that. and traveler rewardoo."
+   ],
+   "seconds_per_response": 0.857
+  },
+  {
+   "id": "report2024-1",
+   "setting": "200 steps, no clamp",
+   "responses": [
+    "maris be these an be traveler travelerlity dick enclosure",
+    "human but being, for 501 akira your be like likeving traveler!. it..",
+    "but with not are being traveler s requirements for to to know so so a rather traveler that. and walker rightoo."
+   ],
+   "seconds_per_response": 2.836
+  },
+  {
+   "id": "report2024-2",
+   "setting": "200 steps, no clamp",
+   "responses": [
+    "be these will be traveler rightlity dick enclosure",
+    "but being, for if sorcerer will right like likeving traveler! rather it..",
+    "with not are being traveler s requirements for to to know so so a rather stabilized that. and walker rewardoo [unused970] to"
+   ],
+   "seconds_per_response": 2.361
+  },
+  {
+   "id": "test-3",
+   "setting": "200 steps, no clamp",
+   "responses": [
+    "be are '! know is [unused970] like plays be is! maris beeding will be traveler rightlity dick 501",
+    "traveler but traveler couple the princess phone is so be and just being but being, for 501 sorcerer will be traveler likeving traveler! right it..",
+    "with human with but have if and moved the is are these but with not are being traveler s requirements for to to know so so a rather these that. and walker myoo."
+   ],
+   "seconds_per_response": 2.347
+  },
+  {
+   "id": "test-4",
+   "setting": "200 steps, no clamp",
+   "responses": [
+    "so was like have true. a 501 like [unused970] be i, be be are ' of rather is are like. be is! maris beeding will be traveler 501 toaus 501",
+    "just be ' but like a they is like of be revolves areld traveler but like couple the have phone is so be and just being but being, for 501 akira will be like likeving traveler!. it..",
+    "if but [unused970] will did if to? meetings have be? isving with human with but have if and moved the. are these but with not are being traveler human requirements for to to know so so a rather 501 that. and walker"
+   ],
+   "seconds_per_response": 2.323
+  },
+  {
+   "id": "test-6",
+   "setting": "200 steps, no clamp",
+   "responses": [
+    "traveler boats i maris so was like but true. a 501 like [unused970] be i, be be re '! know is [unused970] like plays be is! maris beeding will be traveler 501 toaus 501",
+    "sophomore where s be enclosure be ' but like but is is like of be revolves areld traveler but traveler couple the have phone is so be and just being but being, for 501 akira will right like likeving traveler!. it..",
+    "traveler and bai with. traveler [unused970] will did if to? meetings have be? isving with human with but have if and moved the. are these but with not are being traveler human requirements for to to know so so a rather 501 that. and"
+   ],
+   "seconds_per_response": 2.328
+  },
+  {
+   "id": "test-8",
+   "setting": "200 steps, no clamp",
+   "responses": [
+    "sophomore traveler where i like so was like have true. a 501 like [unused970] be i, be be are '! know is [unused970] like plays be is! are beeding will be traveler 501 toaus 501",
+    "sophomore sophomore where s be enclosure be ' but like a is is like of be revolves areld traveler but traveler couple the have phone is so be and just being but being, for 501 akira will be like likeving traveler!. it..",
+    "sophomore traveler and bai with like but [unused970] will did if to? meetings have be? isving with human with but have if and moved the in are these but with not are being traveler human requirements for to to know with so a rather 501 that. and walker!"
+   ],
+   "seconds_per_response": 2.339
+  },
+  {
+   "id": "test-10",
+   "setting": "200 steps, no clamp",
+   "responses": [
+    "true because a was like [unused970] be i, be be are '! know is are like plays be is! are beeding will be traveler being toaus 501",
+    "right a they is like of be revolves areld traveler but traveler couple the have phone is so be and just is but being, for 501 akira will be like likeving traveler!. it..",
+    "did if to? meetings have be? isving with human with but have if and moved the is are these but with not are being traveler s requirements for to to know with so a rather these that. and walker myoo."
+   ],
+   "seconds_per_response": 3.606
+  },
+  {
+   "id": "test-11",
+   "setting": "200 steps, no clamp",
+   "responses": [
+    "traveler where i maris so was like have true. a 501 like [unused970] be i, be be are '! know is are like plays be is! are beeding will be traveler 501 toaus 501",
+    "sophomore where s be just be ' but like a is is like of be revolves areld traveler but traveler couple the have phone is so be and just being but being, for 501 akira. be like likeving traveler!. it..",
+    "traveler and bai with like but [unused970] will did if to? meetings have be? isving with human with but have if and moved the. are these but have not are being traveler s requirements for to to know maris so a rather 501 that. and."
+   ],
+   "seconds_per_response": 2.608
+  },
+  {
+   "id": "waffles",
+   "setting": "200 steps, no clamp",
+   "responses": [
+    "like [unused970] be i, be be re '! rather is are like plays be is! maris beeding will be traveler right toaus 501",
+    "on of be 501 areld traveler but traveler couple the princess phone is so be and just being but being, for 501 sorcerer will be like likeving traveler!. it..",
+    "meetings have be? isving with human with but just if and moved the. are these but with not are being traveler human requirements for to to know with so a rather 501 that. and walker!oo."
+   ],
+   "seconds_per_response": 2.276
+  },
+  {
+   "id": "weekend",
+   "setting": "200 steps, no clamp",
+   "responses": [
+    "boats i maris so was like have true right a 501 like [unused970] be i, be be are ' of know is are like plays be is! are beeding will be traveler 501 toaus 501",
+    "where s be enclosure be ' but like a is is like of be revolves areld traveler but like couple the have phone is so be and just being but being, for 501 akira will be like likeving traveler!. it..",
+    "and bai with like but [unused970] will did if to? meetings have be? isving with human with but have if and moved the. are these but with not are being traveler s requirements for to to know with so a rather 501 that. and walker."
+   ],
+   "seconds_per_response": 2.323
+  },
+  {
+   "id": "movie",
+   "setting": "200 steps, no clamp",
+   "responses": [
+    "true right a 501 like will be i, be be are '! know is are like will be is! maris beeding will be traveler 501 will dat 501",
+    "like a they is like of be enclosure areld traveler but traveler couple the princess phone is so be and just being but being, for 501 akira will be like likeving traveler!. it..",
+    "did if to? meetings have be? isving with human with but have if and moved the in are these but with not are being traveler human requirements for to to know with so a rather 501 that. and walker."
+   ],
+   "seconds_per_response": 2.34
+  },
+  {
+   "id": "rain",
+   "setting": "200 steps, no clamp",
+   "responses": [
+    "have true. a was like [unused970] be i, be be are ' of rather is are like plays be is! maris beeding will be traveler 501 toaus 501",
+    "but like a is is like of be revolves areld traveler but traveler couple the princess phone is so be and just being but being, for 501 sorcerer will be like likeving traveler!. it..",
+    "will did if to? meetings have be? isving with human with but just if and moved the be are these but with not are being traveler s requirements for to to know so so a rather these that. and walker rewardoo."
+   ],
+   "seconds_per_response": 2.75
+  }
+ ],
+ "test_metrics": [
+  {
+   "n": 200,
+   "corpus_bleu": 0.0002659098150557714,
+   "sentence_bleu": 0.0029041062648343273,
+   "distinct_1": 0.04430551780375102,
+   "distinct_2": 0.25954636807349984,
+   "avg_len": 18.395,
+   "steps": 50,
+   "clamp": true,
+   "weights": "ema",
+   "seconds": 325.6,
+   "clamp_max_t": null
+  },
+  {
+   "n": 200,
+   "corpus_bleu": 0.00024258584825581153,
+   "sentence_bleu": 0.005856267375979483,
+   "distinct_1": 0.08800155068811785,
+   "distinct_2": 0.5850806451612903,
+   "avg_len": 25.795,
+   "steps": 50,
+   "clamp": true,
+   "clamp_max_t": 1000,
+   "weights": "ema",
+   "seconds": 189.5
+  },
+  {
+   "n": 200,
+   "corpus_bleu": 0.00014496687556374714,
+   "sentence_bleu": 0.006229406293975163,
+   "distinct_1": 0.1028537455410226,
+   "distinct_2": 0.6742314833917887,
+   "avg_len": 25.23,
+   "steps": 50,
+   "clamp": true,
+   "clamp_max_t": 500,
+   "weights": "ema",
+   "seconds": 127.2
+  },
+  {
+   "n": 200,
+   "corpus_bleu": 0.00015540691149314764,
+   "sentence_bleu": 0.008204891924463548,
+   "distinct_1": 0.0881057268722467,
+   "distinct_2": 0.6113102349661489,
+   "avg_len": 26.105,
+   "steps": 50,
+   "clamp": false,
+   "clamp_max_t": null,
+   "weights": "ema",
+   "seconds": 115.2
+  }
+ ]
+}

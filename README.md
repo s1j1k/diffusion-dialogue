@@ -44,10 +44,19 @@ so the bug cannot return. Full analysis, with six smaller defects:
 
 ```
 dialdiff/      model, diffusion process, noise schedules, data, metrics
-scripts/       train.py, evaluate.py, legacy_oracle_check.py
+scripts/       train, evaluate, serve, benchmark, record_trial, denoise_probe, legacy checks
 tests/         unit tests (pytest)
-docs/          technical notes, research log, literature notes
+docs/          technical notes, research log, literature, benchmarking, experiments/
+benchmarks/    fixed prompts and every model version's responses to them
+models/        model version registry (checkpoints are GitHub Release assets)
 ```
+
+## Status
+
+Current model **v0.1** (7.5M parameters, trained for ~1 hour on a laptop
+CPU) learns to denoise but still produces word soup; compare versions in
+[benchmarks/](benchmarks/README.md). A GPU run is next: matching DiffuSeq's
+training budget would take decades on this CPU (see the research log).
 
 ## Usage
 
@@ -65,6 +74,10 @@ python scripts/train.py --preset cpu-small --train-limit 200000 --out runs/cpu-s
 
 # Generate and score responses for 1,000 test prompts with 200 sampling steps
 python scripts/evaluate.py --ckpt runs/base/checkpoint.pt --steps 200
+
+# Chat with a checkpoint through a local inference server
+python scripts/serve.py --ckpt runs/base/checkpoint.pt
+curl -s localhost:8000/generate -H "Content-Type: application/json" -d '{"prompt": "what are you doing this weekend?"}'
 ```
 
 `datasets/sample/` has a few pairs for a quick smoke test
