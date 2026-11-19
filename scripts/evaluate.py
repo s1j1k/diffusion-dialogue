@@ -31,6 +31,7 @@ def main():
     p.add_argument("--steps", type=int, default=200, help="sampling steps (<= num_steps)")
     p.add_argument("--batch-size", type=int, default=64)
     p.add_argument("--no-clamp", action="store_true")
+    p.add_argument("--clamp-max-t", type=int, help="only snap to word embeddings at steps t <= this")
     p.add_argument("--raw-weights", action="store_true", help="use raw instead of EMA weights")
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
@@ -52,16 +53,18 @@ def main():
     hyps, refs, start = [], [], time.time()
     for b in loader:
         ids, mask = b["ids"].to(device), b["mask"].to(device)
-        out = diffusion.sample(model, ids, mask, steps=args.steps, clamp=not args.no_clamp)
+        out = diffusion.sample(model, ids, mask, steps=args.steps, clamp=not args.no_clamp,
+                               clamp_max_t=args.clamp_max_t)
         for o, r, m in zip(out, ids, mask):
             hyps.append(decode_response(o, m, tok))
             refs.append(decode_response(r, m, tok))
     elapsed = time.time() - start
 
-    metrics = {**score(hyps, refs), "steps": args.steps, "clamp": not args.no_clamp,
+    metrics = {**score(hyps, refs), "steps": args.steps, "clamp": not args.no_clamp, "clamp_max_t": args.clamp_max_t,
                "weights": "raw" if args.raw_weights else "ema", "seconds": round(elapsed, 1)}
     run_dir = os.path.dirname(args.ckpt)
-    tag = f"{args.split}_steps{args.steps}"
+    clamp_tag = "noclamp" if args.no_clamp else (f"clamp{args.clamp_max_t}" if args.clamp_max_t is not None else "clamp")
+    tag = f"{args.split}_steps{args.steps}_{clamp_tag}"
     with open(os.path.join(run_dir, f"metrics_{tag}.json"), "w") as f:
         json.dump(metrics, f, indent=2)
     with open(os.path.join(run_dir, f"samples_{tag}.jsonl"), "w", encoding="utf-8") as f:

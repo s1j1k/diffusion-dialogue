@@ -1,0 +1,71 @@
+{
+ "about": "One entry per model version. Checkpoints are attached to GitHub Releases (tag = release_tag); everything needed to rebuild a version is recorded here. See models/README.md.",
+ "models": [
+  {
+   "version": "v0",
+   "date": "2024-05-30",
+   "status": "historical; checkpoint not kept",
+   "model_summary": "BERT-base encoder (110M) over 768-d BERT embeddings",
+   "training_summary": "1,000 pairs, 4,000 steps x 32 (A100, university HPC)",
+   "code_commit": "ce8a1ff",
+   "rebuild": {
+    "command": "git checkout ce8a1ff && python src/run_train.py && python src/run_test.py",
+    "notes": "Expects datasets/CommonsenseConversation and a CUDA GPU. Contains the x0/epsilon sampling bug (docs/TECHNICAL_NOTES.md), so a rebuilt model reproduces the failure, not a working model. The original checkpoint lived on the HPC scratch space and was not kept."
+   },
+   "reported_results": {
+    "sentence_bleu_4_prompts": 0.00046,
+    "test_loss": 17.19,
+    "source": "2024 assignment report, Table 1 and Section 2.2"
+   },
+   "checkpoint": null
+  },
+  {
+   "version": "v0.1",
+   "date": "2026-11-19",
+   "status": "current",
+   "model_summary": "7.5M dialdiff transformer (d256 x 4 layers, 128-d embeddings, seq_len 64)",
+   "training_summary": "first 100k pairs, 2,000 steps x 32 (64k samples), laptop CPU",
+   "code_commit": "db2613f",
+   "config": {
+    "tokenizer": "bert-base-uncased",
+    "seq_len": 64,
+    "emb_dim": 128,
+    "d_model": 256,
+    "n_layers": 4,
+    "n_heads": 4,
+    "dropout": 0.1,
+    "time_dim": 128,
+    "num_steps": 2000,
+    "schedule": "sqrt",
+    "nll_fraction": 0.25,
+    "lr": 0.0003,
+    "weight_decay": 0.0,
+    "batch_size": 32,
+    "train_steps": 2000,
+    "warmup_steps": 200,
+    "grad_clip": 1.0,
+    "ema_decay": 0.999,
+    "seed": 0,
+    "train_pairs": 100000,
+    "params": 7477632
+   },
+   "data": {
+    "train": "datasets/CommonsenseConversation/train.jsonl (first 100,000 lines)",
+    "valid": "valid.jsonl (first 2,000 lines)",
+    "source": "DiffuSeq release: https://drive.google.com/drive/folders/1exENF9Qc5UtXnHlNl9fvaxP3zyyH32qp"
+   },
+   "rebuild": {
+    "command": "git checkout db2613f && python scripts/train.py --preset cpu-small --train-limit 100000 --train-steps 2000 --warmup-steps 200 --eval-every 500 --out runs/cpu-small",
+    "notes": "Seed 0 is fixed, but bit-identical weights also need the same PyTorch build and hardware (CPU, torch 2.15.0+cpu). Expect the same training curve and scores within noise."
+   },
+   "checkpoint": {
+    "release_tag": "model-v0.1",
+    "asset": "dialdiff-v0.1-cpu-small.pt",
+    "sha256": "a1185eab69a70eebaf3f69af603dd477a1881166c543fc877f95dcf09538e77f",
+    "bytes": 59866577,
+    "contents": "config, raw weights ('model'), EMA weights ('ema'), tokenizer name"
+   },
+   "trial_record": "docs/experiments/cpu-small.md"
+  }
+ ]
+}

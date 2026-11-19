@@ -70,7 +70,7 @@ class TextDiffusion:
         return {"loss": loss.mean(), "mse": mse.mean(), "nll": nll.mean(), "prior": prior.mean()}
 
     @torch.no_grad()
-    def sample(self, model, ids, mask, steps=None, clamp=True, x0_fn=None):
+    def sample(self, model, ids, mask, steps=None, clamp=True, clamp_max_t=None, x0_fn=None):
         """
         Generate the masked positions of ids. Returns token ids [B, L].
 
@@ -79,8 +79,11 @@ class TextDiffusion:
             x_s     = sqrt(abar_s) x0_hat + sqrt(1 - abar_s) eps_hat
         so any number of steps <= num_steps can be used.
 
-        clamp: snap x0_hat to the nearest word embedding at every step
-               (the "clamping trick" of Diffusion-LM / DiffuSeq).
+        clamp: snap x0_hat to the nearest word embedding (the "clamping
+               trick" of Diffusion-LM / DiffuSeq).
+        clamp_max_t: only clamp at steps t <= clamp_max_t. At high noise the
+               prediction is close to the mean embedding, and snapping it
+               locks in whichever tokens lie nearest the origin.
         x0_fn: optional replacement for the network, used by the tests.
         """
         steps = steps or self.num_steps
@@ -93,7 +96,7 @@ class TextDiffusion:
         for i, t in enumerate(ts):
             t_vec = torch.full((ids.shape[0],), t, device=ids.device, dtype=torch.long)
             x0_hat = x0_fn(x, t_vec) if x0_fn is not None else model(x, t_vec)
-            if clamp:
+            if clamp and (clamp_max_t is None or t <= clamp_max_t):
                 x0_hat = model.embed(model.nearest_tokens(x0_hat))
             x0_hat = torch.where(m, x0_hat, emb)
             if i == len(ts) - 1:

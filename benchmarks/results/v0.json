@@ -1,0 +1,33 @@
+{
+ "version": "v0",
+ "benchmarked_at": "2024-05-30",
+ "note": "Outputs transcribed from the 2024 report (Table 1); the checkpoint was not kept. Only the report's prompts are available.",
+ "settings": [
+  {
+   "label": "2,000 ancestral steps (2024 code)"
+  }
+ ],
+ "seeds": null,
+ "outputs": [
+  {
+   "id": "report2024-1",
+   "setting": "2,000 ancestral steps (2024 code)",
+   "responses": [
+    "survivor instruments shot screens proper dirt 1970 upon gsacker step discussuted welcome general health ignoring levels copies bag frank tutorite caliber skye wig faith training injuries service unbelievable sofa scarborough bowling maximum peace casting contract colleagues veteran actor anger relay tunnel tigers declare sexual sessions churchies dash mixtape lady pistol respondration arrested conflict dates organized plastic copeloading matt lacrosse variety blaze mm spring kelly conspiracy beck switching ran9 skye dark cleared valid lord friday simpsons musical text tokyo demons ho countless mechanic"
+   ]
+  },
+  {
+   "id": "report2024-2",
+   "setting": "2,000 ancestral steps (2024 code)",
+   "responses": [
+    "sketch 1995 activities failures imperative plus era ki seats children plans monsters explicitly sperm mainly daughter oddlyns covers feb culture gt continues schedule 26 sufferinginess variety serveoc claire options station sped promote vegetables technical baking roughly track among sink returns greenew thoroughly countless tea thousand generaltra ed froze bullets beyond plates guts accustomed tommy subtle wisconsin links hawaii background copies pegasus learned stomachold transfers farmersnt tea boston between tribe withdrawal six areas wiring firing tore victory nearly despair instructions pieces apartments"
+   ]
+  }
+ ],
+ "test_metrics": [
+  {
+   "sentence_bleu": 0.00046,
+   "n": 4
+  }
+ ]
+}

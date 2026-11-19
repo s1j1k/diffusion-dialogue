@@ -64,6 +64,25 @@ seen), batch 32, lr 3e-4, warm-up 200, rounding NLL on 25 % of positions,
 T = 2,000, sqrt schedule. A sanity check that the fixed pipeline learns, not
 a tuned result. Results: *pending*.
 
+## Training budget compared with DiffuSeq
+
+"Samples seen" = training steps × batch size. DiffuSeq settings are from its
+published training script for this dataset (`scripts/train.sh`, README).
+
+| | DiffuSeq (paper) | Our 2024 run | `cpu-small` (2026) |
+| --- | --- | --- | --- |
+| Hardware | 7 GPUs | 1 A100, 50 min job | 4-thread laptop CPU |
+| Unique training pairs | 3,382,137 | 1,000 | 100,000 |
+| Steps × batch | 140,000 × 2,048 | 4,000 × 32 | 2,000 × 32 |
+| Samples seen | 286.7M | 128k (0.045 %) | 64k (0.02 %) |
+| Passes over its data | ~85 | 128 (memorising 1,000 pairs) | 0.64 |
+| Model | ~91M (BERT-base-sized), 128-d embeddings | BERT-base encoder, 768-d BERT embeddings | 7.5M, 128-d embeddings |
+| Decoding | MBR over 10 samples (10 seeds) | 1 sample | 1 sample |
+
+Two separate problems held back the 2024 result: the sampler bug (which no
+amount of training could fix), and a training budget about 2,000× smaller
+than DiffuSeq's, on a dataset too small to learn general dialogue from.
+
 ## Next
 
 - Full-size run on Colab (default config, 24M parameters, ≥50k steps).
